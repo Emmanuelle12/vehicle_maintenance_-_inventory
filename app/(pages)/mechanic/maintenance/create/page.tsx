@@ -53,6 +53,7 @@ export default function Create() {
                 },
                 error: {
                     render({ data }: { data: AxiosResponse }) {
+                        console.log(data)
                         Swal.fire({
                             title: 'Report Error',
                             text: data.data?.message,
