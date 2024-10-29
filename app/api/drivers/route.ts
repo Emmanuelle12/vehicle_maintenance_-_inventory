@@ -47,14 +47,21 @@ export const POST = async (request: Request) => {
         if (!user || user?.position != 'driver') {
             return new NextResponse(JSON.stringify({message: 'User is not a driver'}), {status: 400});
         }
-        const driver_report = new DriverReport({
+        // const driver_report = new DriverReport({
+        //     report_date: report_date,
+        //     bus_number: bus_number,
+        //     driver: driver,
+        //     conductor: conductor,
+        //     report: report
+        // });
+        // driver_report.save();
+        const result = DriverReport.create({
             report_date: report_date,
             bus_number: bus_number,
             driver: driver,
             conductor: conductor,
             report: report
-        });
-        driver_report.save();
+        })
         return new NextResponse(JSON.stringify({message: 'Driver Report successfully created'}), {status: 200});
     } catch (error: unknown) {
         let message = '';

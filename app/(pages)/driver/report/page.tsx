@@ -34,11 +34,17 @@ export default function Report() {
         loading: true
     })
 
+    const handleSearch = () => {
+
+    }
+
     const getReports = async (id: string) => {
         await axios.get(`/api/drivers?driverId=${id}`)
         .then(response => {
+            console.log(response)
+            const rep = response.data?.reports
             setReports({
-                reports: response.data?.reports,
+                reports: rep,
                 loading: false
             })
         })
@@ -58,7 +64,7 @@ export default function Report() {
 
     return(
         <div className="w-full">
-            <Header title="DRIVERS REPORTS" backTo="/" />
+            <Header title="DRIVERS REPORTS" backTo="/" goTo={'/driver/report/create'} searchFunction={handleSearch} />
             <section className="w-full bg-white min-h-80">
                 <table className="w-full table-auto md:table-fixed text-center">
                     <thead className="bg-gray-200">
@@ -75,7 +81,7 @@ export default function Report() {
                             reports.reports.map((item,index)=>{
                                 return(
                                     <tr key={index}>
-                                        <td className="p-2 border-x-2 border-black">{item.report_date.toLocaleDateString('en-US')}</td>
+                                        <td className="p-2 border-x-2 border-black">{new Date(item.report_date).toLocaleDateString('en-US')}</td>
                                         <td className="p-2 border-x-2 border-black">{item.bus_number}</td>
                                         <td className="p-2 border-x-2 border-black">
                                             {item.driver.first_name} 

@@ -1,6 +1,17 @@
 import { Schema, model, models } from "mongoose";
 
-const driverReportSchema = new Schema(
+interface IDriverReport extends Document {
+    report_date: Date;
+    bus_number: string;
+    driver: Schema.Types.ObjectId;
+    conductor: string;
+    report: string;
+    deletedAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const driverReportSchema = new Schema<IDriverReport>(
     {
         report_date: {
             type: Date,
