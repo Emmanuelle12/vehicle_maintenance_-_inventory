@@ -58,7 +58,7 @@ export default function Report() {
                             reports.map((item,index)=>{
                                 return(
                                     <tr key={index}>
-                                        <td className="p-2 border-x-2 border-black">{item.report_date.toLocaleDateString('en-US')}</td>
+                                        <td className="p-2 border-x-2 border-black">{new Date(item.report_date).toLocaleDateString('en-US')}</td>
                                         <td className="p-2 border-x-2 border-black">{item.bus_number}</td>
                                         <td className="p-2 border-x-2 border-black">
                                             {item.driver.first_name} 
