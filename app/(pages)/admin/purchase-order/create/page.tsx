@@ -1,5 +1,6 @@
 'use client'
 
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 import Header from "@/app/components/Header"
 import axios, { AxiosResponse } from "axios";
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react"
@@ -45,6 +46,18 @@ export default function Create() {
         quantity: 0,
         total_price: 0,
     })
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/admin', name: 'Home'},
+        {path: '/admin/purchase-order', name: 'Purchase Orders'},
+        {path: '/admin/inventory', name: 'Inventory'},
+        {path: '/admin/suppliers', name: 'Suppliers'},
+    ]
 
     const getOptions = useCallback(async () => {
         await axios.get('/api/product')
@@ -138,6 +151,7 @@ export default function Create() {
     return (
         <div className="w-full">
             <ToastContainer position="bottom-right" />
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
             <Header title="PURCHASE ORDER" backTo={'/admin/purchase-order'} />
             <section className="w-full flex justify-center items-center h-96 overflow-y-auto pt-80">
                 <form onSubmit={handleSubmit}>

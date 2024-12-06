@@ -7,6 +7,7 @@ import { FaPencilAlt } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 import { useAlert } from "@/app/contexts/AlertContext"
 import { useConfirmation } from "@/app/contexts/ConfirmationContext"
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 
 interface Supplier {
     _id: string;
@@ -29,6 +30,18 @@ export default function Suppliers() {
     })
     const { triggerAlert } = useAlert()
     const { confirm } = useConfirmation()
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/admin', name: 'Home'},
+        {path: '/admin/purchase-order', name: 'Purchase Orders'},
+        {path: '/admin/inventory', name: 'Inventory'},
+        {path: '/admin/suppliers', name: 'Suppliers'},
+    ]
 
     const searchSupplier = (key: string) => {
         const temp = suppliers.supplierArr.filter(data => 
@@ -85,7 +98,8 @@ export default function Suppliers() {
 
     return (
         <div className="w-full">
-            <Header title="SUPPLIERS" backTo={'/'} goTo={'/admin/suppliers/create'} searchFunction={searchSupplier}></Header>
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
+            <Header title="SUPPLIERS" goTo={'/admin/suppliers/create'} searchFunction={searchSupplier}></Header>
             <section className="w-full bg-white min-h-80 2xl:min-h-96">
                 <table className="w-full table-auto md:table-fixed text-center">
                     <thead className="bg-gray-200">

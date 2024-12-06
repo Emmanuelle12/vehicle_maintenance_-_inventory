@@ -1,5 +1,6 @@
 'use client'
 
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 import Header from "@/app/components/Header"
 import { useAuthStore } from "@/app/stores/auth";
 import axios, { AxiosResponse } from "axios";
@@ -37,6 +38,16 @@ export default function Archive() {
     const [archive, setArchive] = useState<SubmittedReport[]>([])
     const [archiveArr, setArchiveArr] = useState<SubmittedReport[]>([])
     const store = useAuthStore()
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/mechanic/report', name: 'Reports'},
+        {path: '/mechanic/inventory', name: 'Inventory'},
+    ]
 
     const handleSearch = (key: string) => {
         const temp = archiveArr.filter(item => 
@@ -160,6 +171,7 @@ export default function Archive() {
     return(
         <div className="w-full">
             <ToastContainer position="bottom-right" />
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
             <Header title="MECHANIC REPORT ARCHIVE" backTo={'/mechanic/reports'} searchFunction={handleSearch}/>
             <section className="w-full min-h-80 bg-white overflow-auto">
             <table className="w-full table-auto md:table-fixed text-center">

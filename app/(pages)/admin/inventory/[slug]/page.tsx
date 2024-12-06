@@ -1,5 +1,6 @@
 'use client'
 
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 import Header from "@/app/components/Header"
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react"
@@ -43,6 +44,18 @@ export default function Inventory({ params }: { params: { slug: string } }) {
     const [itemIn, setItemIn] = useState<Order[]>([])
     const [panel, setPanel] = useState<string>('in')
     const [itemOut, setItemOut] = useState<InventoryReport[]>([])
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/admin', name: 'Home'},
+        {path: '/admin/purchase-order', name: 'Purchase Orders'},
+        {path: '/admin/inventory', name: 'Inventory'},
+        {path: '/admin/suppliers', name: 'Suppliers'},
+    ]
 
     const getData = useCallback(async () => {
         await axios.get(`/api/inventory?inventory_id=${params.slug}`)
@@ -73,6 +86,7 @@ export default function Inventory({ params }: { params: { slug: string } }) {
 
     return (
         <div className="w-full">
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
             <Header title={item.item_name} backTo={'/admin/inventory'} />
             <section className="w-full bg-gray-400">
                 <header className="flex justify-start items-center">

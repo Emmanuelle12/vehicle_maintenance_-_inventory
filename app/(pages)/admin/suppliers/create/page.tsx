@@ -6,6 +6,7 @@ import { ChangeEvent, FormEvent, useState } from "react"
 import { IoIosBusiness } from "react-icons/io";
 import { HiLocationMarker } from "react-icons/hi";
 import { BsFillTelephoneFill } from "react-icons/bs";
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 
 interface Supplier {
     supplier_company: string;
@@ -19,6 +20,18 @@ export default function Create() {
         supplier_address: '',
         contact: '',
     })
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/admin', name: 'Home'},
+        {path: '/admin/purchase-order', name: 'Purchase Orders'},
+        {path: '/admin/inventory', name: 'Inventory'},
+        {path: '/admin/suppliers', name: 'Suppliers'},
+    ]
 
     const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -47,6 +60,7 @@ export default function Create() {
 
     return (
         <div className="w-full">
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
             <Header title="CREATE SUPPLIER" backTo={'/admin/suppliers'} />
             <form onSubmit={handleSubmit} className="w-full flex justify-center items-center">
                 <section className="w-96 space-y-3 mt-10 p-5">

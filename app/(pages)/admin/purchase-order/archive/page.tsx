@@ -7,6 +7,7 @@ import Swal from "sweetalert2"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import { useAuthStore } from "@/app/stores/auth"
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt"
 
 interface Inventory {
     item_name: string;
@@ -34,6 +35,18 @@ export default function Archive() {
     const [archive, setArchive] = useState<PurchaseOrder[]>([])
     const [archiveArr, setArchiveArr] = useState<PurchaseOrder[]>([])
     const store = useAuthStore()
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/admin', name: 'Home'},
+        {path: '/admin/purchase-order', name: 'Purchase Orders'},
+        {path: '/admin/inventory', name: 'Inventory'},
+        {path: '/admin/suppliers', name: 'Suppliers'},
+    ]
 
     const handleSearch = (key: string) => {
         const temp = archiveArr.filter(data => 
@@ -152,6 +165,7 @@ export default function Archive() {
     return(
         <div className="w-full">
             <ToastContainer position="bottom-right" />
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
             <Header title="PURCHASE ORDERS ARCHIVE" backTo={'/admin/purchase-order'} searchFunction={handleSearch} />
             <section className="w-full bg-white min-h-80 2xl:min-h-96 overflow-auto">
                 <table className="w-full table-auto md:table-fixed text-center text-xs">

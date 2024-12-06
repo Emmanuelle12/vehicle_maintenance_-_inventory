@@ -7,6 +7,7 @@ import Swal from "sweetalert2"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css'
 import { useAuthStore } from "@/app/stores/auth"
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt"
 
 interface Inventory {
     item_name: string;
@@ -33,7 +34,12 @@ interface PurchaseOrder {
 export default function PurchaseOrder() {
     const [orders, setOrders] = useState<PurchaseOrder[]>([])
     const [orderArr, setOrderArr] = useState<PurchaseOrder[]>([])
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
     const store = useAuthStore()
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
 
     const searchFunction = (key: string) => {
         const temp = orders.filter(data => 
@@ -160,10 +166,18 @@ export default function PurchaseOrder() {
         )
     }
 
+    const navigationArray = [
+        {path: '/admin', name: 'Home'},
+        {path: '/admin/purchase-order', name: 'Purchase Orders'},
+        {path: '/admin/inventory', name: 'Inventory'},
+        {path: '/admin/suppliers', name: 'Suppliers'},
+    ]
+
     return (
         <div className="w-full">
             <ToastContainer position="bottom-right" />
-            <Header title="PURCHASE ORDERS" backTo={'/'} searchFunction={searchFunction} goTo={'/admin/purchase-order/create'} goTo2={{path: '/admin/purchase-order/archive', title: 'Archive'}} />
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
+            <Header title="PURCHASE ORDERS" searchFunction={searchFunction} goTo={'/admin/purchase-order/create'} goTo2={{path: '/admin/purchase-order/archive', title: 'Archive'}} />
             <section className="w-full bg-white min-h-80 2xl:min-h-96 overflow-auto">
                 <table className="w-full table-auto md:table-fixed text-center text-xs">
                     <thead className="bg-gray-200">

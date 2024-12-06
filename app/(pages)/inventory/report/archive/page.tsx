@@ -1,5 +1,6 @@
 'use client'
 
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 import Header from "@/app/components/Header"
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
@@ -30,6 +31,18 @@ interface Item {
 export default function Archive() {
     const [reports, setReports] = useState<inventoryReport[]>([])
     const [reportsArr, setReportsArr] = useState<inventoryReport[]>([])
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/inventory', name: 'Home'},
+        {path: '/inventory/report', name: 'Mechanic Reports & Inventory Reports'},
+        {path: '/inventory/purchase-order', name: 'Purchase Orders'},
+        {path: '/inventory/inventory', name: 'Inventory'},
+    ]
     
     const handleSearch = (key: string) => {
         const temp = reportsArr.filter(data => 
@@ -59,6 +72,7 @@ export default function Archive() {
 
     return (
         <div className="w-full">
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
             <Header title="INVENTORY PERSONNEL REPORT ARCHIVE" backTo={'/inventory/report'} searchFunction={handleSearch} />
             <section className="w-full min-h-80 2xl:min-h-96 bg-white overflow-auto">
                 <table className="table-auto md:table-fixed w-full text-center">

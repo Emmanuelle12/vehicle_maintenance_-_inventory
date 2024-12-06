@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react"
 import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 
 interface Inventory {
     item_name: string;
@@ -34,6 +35,18 @@ export default function PurchaseOrder() {
     const [orders, setOrders] = useState<PurchaseOrder[]>([])
     const [orderArr, setOrderArr] = useState<PurchaseOrder[]>([])
     const store = useAuthStore()
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/inventory', name: 'Home'},
+        {path: '/inventory/report', name: 'Mechanic Reports & Inventory Reports'},
+        {path: '/inventory/purchase-order', name: 'Purchase Orders'},
+        {path: '/inventory/inventory', name: 'Inventory'},
+    ]
 
     const searchFunction = (key: string) => {
         const temp = orders.filter(data => 
@@ -156,7 +169,8 @@ export default function PurchaseOrder() {
     return (
         <div className="w-full">
             <ToastContainer position="bottom-right" />
-            <Header title="PURCHASE ORDERS" backTo={'/inventory'} searchFunction={searchFunction}/>
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
+            <Header title="PURCHASE ORDERS" searchFunction={searchFunction}/>
             <section className="w-full bg-white min-h-80 2xl:min-h-96 overflow-auto">
                 <table className="w-full table-auto md:table-fixed text-center text-xs">
                     <thead className="bg-gray-200">

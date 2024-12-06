@@ -7,6 +7,7 @@ import addImg from "@/assets/images/add-item-icon.jpg"
 import DashboardButton from "@/app/components/DashboardButton"
 import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt"
 
 interface Inventory {
     _id: string;
@@ -15,6 +16,18 @@ interface Inventory {
 
 export default function Inventory() {
     const [inventory, setInventory] = useState<Inventory[]>([])
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/inventory', name: 'Home'},
+        {path: '/inventory/report', name: 'Mechanic Reports & Inventory Reports'},
+        {path: '/inventory/purchase-order', name: 'Purchase Orders'},
+        {path: '/inventory/inventory', name: 'Inventory'},
+    ]
 
     const getInventory = useCallback(async () => {
         await axios.get('/api/inventory')
@@ -32,6 +45,7 @@ export default function Inventory() {
     }, [getInventory])
     return (
         <div className="w-full">
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
             <Header title="INVENTORY" backTo={'/inventory'} />
             <section className="w-full md:px-10">
                 <div className="w-full flex flex-wrap justify-center gap-2 md:gap-4">

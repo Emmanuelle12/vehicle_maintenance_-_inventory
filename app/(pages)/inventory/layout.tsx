@@ -9,7 +9,7 @@ const CustomLayout: React.FC<LayoutProps> = ({ children }) => {
     return (
       <div>
         <Navigation />
-        <main className="pt-32 md:pt-20">
+        <main className="pt-32">
             {children}
         </main>
       </div>

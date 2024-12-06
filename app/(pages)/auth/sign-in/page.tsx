@@ -10,6 +10,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import axios from "axios";
 import { useAuthStore } from "@/app/stores/auth";
 import SignUpModal from "@/app/components/SignUpModal";
+import Swal from "sweetalert2";
 
 export default function SignIn() {
     const [signInForm, setSignInForm] = useState<{
@@ -65,6 +66,11 @@ export default function SignIn() {
         })
         .catch(error => {
             console.log(error)
+            Swal.fire({
+                title: 'Error',
+                text: error.response?.data?.message,
+                icon: 'error'
+            })
         })
         .finally(()=>{
             setButtonDisabled(false)

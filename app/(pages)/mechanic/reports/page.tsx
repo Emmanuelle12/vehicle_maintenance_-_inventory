@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import Swal from "sweetalert2";
 import { IoMdClose } from "react-icons/io";
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 
 interface User {
     _id: string;
@@ -75,6 +76,16 @@ export default function Report() {
     const [panel, setPanel] = useState<string>('driver')
     const [isMounted, setIsMounted] = useState<boolean>(false)
     const store = useAuthStore()
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/mechanic/report', name: 'Reports'},
+        {path: '/mechanic/inventory', name: 'Inventory'},
+    ]
 
     const setOptions = (items: Item[]) => {
         const newArr = items.map((inv)=>{
@@ -233,6 +244,7 @@ export default function Report() {
     return(
         <div className="w-full">
             <ToastContainer position="bottom-right" />
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
             <Header title="MECHANIC REPORTS" goTo2={{path: '/mechanic/reports/archive', title: 'Archive'}} searchFunction={handleSearch} />
             <div 
                 className={`${openReport ? 

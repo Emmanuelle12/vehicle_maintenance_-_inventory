@@ -1,5 +1,6 @@
 'use client'
 
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt"
 import Header from "@/app/components/Header"
 import axios, { AxiosError } from "axios"
 import { FormEvent, useState } from "react"
@@ -9,6 +10,18 @@ import Swal from "sweetalert2"
 
 export default function Create() {
     const [itemName, setItemName] = useState<string>('')
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/inventory', name: 'Home'},
+        {path: '/inventory/report', name: 'Mechanic Reports & Inventory Reports'},
+        {path: '/inventory/purchase-order', name: 'Purchase Orders'},
+        {path: '/inventory/inventory', name: 'Inventory'},
+    ]
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -41,6 +54,7 @@ export default function Create() {
     return (
         <div className="w-full">
             <ToastContainer position="bottom-right" />
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
             <Header title="CREATE INVENTORY ITEM" backTo={'/inventory/inventory'} />
             <section className="w-full flex justify-center items-center">
                 <form onSubmit={handleSubmit}>

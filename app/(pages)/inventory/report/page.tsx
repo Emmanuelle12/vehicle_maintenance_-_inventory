@@ -1,5 +1,6 @@
 'use client'
 
+import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 import Header from "@/app/components/Header"
 import { useAuthStore } from "@/app/stores/auth";
 import axios from "axios";
@@ -61,6 +62,18 @@ export default function Report() {
     const [reports, setReports] = useState<inventoryReport[]>([])
     const [reportsArr, setReportsArr] = useState<inventoryReport[]>([])
     const store = useAuthStore()
+    const [hidePanel, setHidePanel] = useState<boolean>(true)
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
+    const navigationArray = [
+        {path: '/inventory', name: 'Home'},
+        {path: '/inventory/report', name: 'Mechanic Reports & Inventory Reports'},
+        {path: '/inventory/purchase-order', name: 'Purchase Orders'},
+        {path: '/inventory/inventory', name: 'Inventory'},
+    ]
 
     const handleSearch = (key: string) => {
         if (panel == 'mechanic') {
@@ -172,7 +185,8 @@ export default function Report() {
 
     return(
         <div className="w-full">
-            <Header title="INVENTORY PERSONNEL'S REPORT" backTo={'/inventory'} goTo2={{path: '/inventory/report/archive', title: 'Archive'}} searchFunction={handleSearch} />
+            <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
+            <Header title="INVENTORY PERSONNEL'S REPORT" goTo2={{path: '/inventory/report/archive', title: 'Archive'}} searchFunction={handleSearch} />
             <div className={`${reportModal ? 'fixed top-0 left-0 w-full h-full bg-blue-950/50 backdrop-blur-md z-10 flex justify-center items-center' : 'hidden'}`}>
                 <section className="w-full md:w-2/5 bg-white rounded-lg p-5">
                     <header className="mb-5 flex justify-between items-center">
