@@ -26,7 +26,7 @@ const DashboardPanelAlt: FC<Props> = ({ isHidden, navs, toggle }) => {
                     {
                         navs.map((lnk, idx) => {
                             return(
-                                <Link href={lnk.path} className="p-2 text-white text-sm font-bold rounded w-full bg-blue-400 hover:bg-blue-600">{lnk.name}</Link>
+                                <Link key={idx} href={lnk.path} className="p-2 text-white text-sm font-bold rounded w-full bg-blue-400 hover:bg-blue-600">{lnk.name}</Link>
                             )
                         })
                     }
