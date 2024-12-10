@@ -1,5 +1,6 @@
 'use client'
 
+import DashboardPanel from "@/app/components/DashboardPanel";
 import Header from "@/app/components/Header"
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react"
@@ -26,6 +27,16 @@ interface Report {
 export default function MechanicReport() {
     const [reports, setReports] = useState<Report[]>([])
     const [reportArr, setReportArr] = useState<Report[]>([])
+    const [hidePanel, setHidePanel] = useState<boolean>(false)
+
+    const pathArray = [
+        { path: '/admin/maintenance/driver', name: 'Drivers Report' },
+        { path: '/admin/maintenance/mechanic', name: 'Mechanic Report' },
+    ]
+
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
     
     const handleSearch = (key: string) => {
         const temp = reportArr.filter(data => 
@@ -56,6 +67,7 @@ export default function MechanicReport() {
 
     return (
         <div className="w-full">
+            <DashboardPanel isHidden={hidePanel} navs={pathArray} toggle={togglePanel} slider={true} />
             <Header title="MECHANIC REPORTS" backTo="/admin" searchFunction={handleSearch} />
             <section className="w-full bg-white min-h-80">
                 <table className="w-full table-auto md:table-fixed text-center">

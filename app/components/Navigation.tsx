@@ -105,7 +105,7 @@ export default function Navigation() {
     }
 
     return (
-        <div className="w-full fixed flex justify-between items-center top-0 border-b border-cyan-400 text-white p-2 z-10 bg-img">
+        <div className="w-full fixed flex justify-between items-center top-0 border-b border-cyan-400 text-white p-2 pr-5 z-10 bg-img">
             <ProfilePanel isHidden={profileModal} handleLogout={logout} toggle={toggleProfile} />
             <NotificationPanel isHidden={notificationModal} notifications={notifications} toggle={toggleNotifications} deleter={deleteNotification} />
             <p className="text-lg md:text-2xl font-bold">GUBAT TRANSPORT COOPERATIVE</p>

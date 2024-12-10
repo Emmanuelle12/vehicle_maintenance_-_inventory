@@ -14,6 +14,7 @@ const supplierSchema = new Schema(
             type: String,
             required: true
         },
+        deletedAt: Date,
     },
     {
         timestamps: true

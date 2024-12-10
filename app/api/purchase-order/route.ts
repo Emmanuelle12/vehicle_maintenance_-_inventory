@@ -7,7 +7,37 @@ import { NextResponse } from "next/server";
 export const GET = async () => {
     try {
         await connect();
-        const orders = await PurchaseOrder.find({ deletedAt: null }).populate('inventory').populate('supplier');
+        // const orders = await PurchaseOrder.find({ deletedAt: null }).populate('inventory').populate('supplier');
+        const orders = await PurchaseOrder.aggregate([
+            // Match documents where "deletedAt" is null
+            { $match: { deletedAt: null } },
+            
+            // Populate the "inventory" field
+            {
+              $lookup: {
+                from: 'inventories', // Collection to join (ensure the name is correct)
+                localField: 'inventory', // Field in PurchaseOrder referencing Inventory
+                foreignField: '_id', // Field in Inventory to match
+                as: 'inventory' // Output array field
+              }
+            },
+            
+            // Populate the "supplier" field
+            {
+              $lookup: {
+                from: 'suppliers', // Collection to join (ensure the name is correct)
+                localField: 'supplier', // Field in PurchaseOrder referencing Supplier
+                foreignField: '_id', // Field in Supplier to match
+                as: 'supplier' // Output array field
+              }
+            },
+          
+            // Unwind the "inventory" field (optional if you expect a single object)
+            { $unwind: { path: '$inventory', preserveNullAndEmptyArrays: true } },
+          
+            // Unwind the "supplier" field (optional if you expect a single object)
+            { $unwind: { path: '$supplier', preserveNullAndEmptyArrays: true } }
+          ]);
         return new NextResponse(JSON.stringify({message: 'OK', orders: orders}), {status: 200});
     } catch (error: unknown) {
         let message = '';

@@ -18,14 +18,18 @@ export default function Home() {
         { path: '/admin/maintenance/mechanic', name: 'Mechanic Report' },
     ]
 
+    const togglePanel = () => {
+        setHidePanel(!hidePanel)
+    }
+
     return (
         <div className="w-full">
             <div className="absolute top-28 left-0">
                 <Header title="DASHBOARD" />
             </div>
-            <DashboardPanel isHidden={hidePanel} navs={pathArray} />
+            <DashboardPanel isHidden={hidePanel} navs={pathArray} toggle={togglePanel} />
             <div className="w-full flex flex-col justify-center items-center relative">
-                <section className="w-96 md:w-[400px] flex flex-wrap justify-center items-center gap-10 md:mt-12">
+                <section className="w-full md:w-[400px] flex flex-wrap justify-center items-center gap-10 mt-12">
                     <button onClick={()=>setHidePanel(!hidePanel)} className="flex flex-col justify-center items-center">
                         <div className="max-w-32">
                             <div className="w-20 h-20 md:w-32 md:h-32 p-2 mb-1 rounded-lg relative overflow-hidden bg-white hover:ring ring-cyan-400 flex justify-center items-center">
