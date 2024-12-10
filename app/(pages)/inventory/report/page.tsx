@@ -3,10 +3,12 @@
 import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 import Header from "@/app/components/Header"
 import { useAuthStore } from "@/app/stores/auth";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { FormEvent, useCallback, useEffect, useState } from "react"
 import { IoMdClose } from "react-icons/io";
 import Swal from "sweetalert2";
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css'
 
 interface User {
     _id: string;
@@ -134,25 +136,40 @@ export default function Report() {
         e.preventDefault()
         const updatedTypes = selectedReport.report ? [...selectedReport.report.map(item => item._id)] : []
         const id = store.user.id
-        await axios.post('/api/inventory-report', {
-            user_id: id,
-            types: updatedTypes,
-            quantities: quantity,
-            driver: selectedReport.driver,
-            bus_number: selectedReport.bus_number,
-        })
-        .then(response => {
-            console.log(response)
-            const rep = response.data?.reports
-            const mec = response.data?.mechanic_reports
-            setReports(rep)
-            setReportsArr(rep)
-            setMechReports(mec)
-            setMechRepArr(mec)
-        })
-        .catch(error => {
-            console.log(error)
-        })
+        toast.promise(
+            axios.post('/api/inventory-report', {
+                user_id: id,
+                types: updatedTypes,
+                quantities: quantity,
+                driver: selectedReport.driver,
+                bus_number: selectedReport.bus_number,
+            }),
+            {
+                pending: 'Submitting report...',
+                success: {
+                    render({ data }: { data: AxiosResponse }) {
+                        const rep = data.data?.reports
+                        const mec = data.data?.mechanic_reports
+                        setReports(rep)
+                        setReportsArr(rep)
+                        setMechReports(mec)
+                        setMechRepArr(mec)
+                        setReportModal(false)
+                        return 'Success'
+                    }
+                },
+                error: {
+                    render({ data }: { data: AxiosError<{message: string}> }) {
+                        console.log(data)
+                        Swal.fire({
+                            title: 'Create Report Error',
+                            text: data.response?.data?.message ?? data.message
+                        })
+                        return 'ERROR'
+                    }
+                }
+            }
+        )
     }
 
     const confirmArchive = (id: string) => {
@@ -185,6 +202,7 @@ export default function Report() {
 
     return(
         <div className="w-full">
+            <ToastContainer position="bottom-right" />
             <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
             <Header title="INVENTORY PERSONNEL'S REPORT" goTo2={{path: '/inventory/report/archive', title: 'Archive'}} searchFunction={handleSearch} />
             <div className={`${reportModal ? 'fixed top-0 left-0 w-full h-full bg-blue-950/50 backdrop-blur-md z-10 flex justify-center items-center' : 'hidden'}`}>
