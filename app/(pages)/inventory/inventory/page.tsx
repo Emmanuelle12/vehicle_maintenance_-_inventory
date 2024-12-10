@@ -2,9 +2,6 @@
 
 import Header from "@/app/components/Header"
 import ItemCard from "@/app/components/ItemCard"
-// import Image from "next/image"
-// import addImg from "@/assets/images/add-item-icon.jpg"
-// import DashboardButton from "@/app/components/DashboardButton"
 import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
 import DashboardPanelAlt from "@/app/components/DashboardPanelAlt"
@@ -48,7 +45,7 @@ export default function Inventory() {
             <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
             <Header title="INVENTORY" backTo={'/inventory'} />
             <section className="w-full md:px-10">
-                <div className="w-full flex flex-wrap justify-center gap-2 md:gap-4">
+                <div className="w-full flex flex-wrap justify-center gap-2 md:gap-4 pb-10">
                     {
                         inventory.map((invntry, index) => {
                             return(
@@ -56,9 +53,6 @@ export default function Inventory() {
                             )
                         })
                     }
-                    {/* <DashboardButton path="/inventory/inventory/create" title="Add Item">
-                        <Image src={addImg} alt="report" width={100} height={100} className="scale-100 absolute" />
-                    </DashboardButton> */}
                 </div>
             </section>
         </div>
