@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react"
 import { FaPencilAlt } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 import { useAlert } from "@/app/contexts/AlertContext"
-import { useConfirmation } from "@/app/contexts/ConfirmationContext"
+// import { useConfirmation } from "@/app/contexts/ConfirmationContext"
 import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 import Swal from "sweetalert2";
 

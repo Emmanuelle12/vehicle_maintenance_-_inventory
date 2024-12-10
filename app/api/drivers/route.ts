@@ -65,6 +65,11 @@ export const POST = async (request: Request) => {
             message: 'You have submitted a new report',
         };
         await Notification.create(notification);
+        const admin = await User.findOne({ role: 'admin' });
+        await Notification.create({
+            user: admin?._id,
+            message: 'Driver has submitted new report',
+        });
         return new NextResponse(JSON.stringify({message: 'Driver Report successfully created'}), {status: 200});
     } catch (error: unknown) {
         let message = '';

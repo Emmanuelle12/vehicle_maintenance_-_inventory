@@ -92,22 +92,22 @@ export default function PurchaseOrder() {
         })
     }
 
-    const confirmReorder = (id: string) => {
-        Swal.fire({
-            title: 'Reorder Confirmation',
-            text: 'Are you sure you want to continue?',
-            icon: 'question',
-            showCancelButton: true,
-            showConfirmButton: true,
-            cancelButtonColor: 'red',
-            confirmButtonColor: 'indigo',
-        })
-        .then(response => {
-            if (response.isConfirmed) {
-                reorder(id)
-            }
-        })
-    }
+    // const confirmReorder = (id: string) => {
+    //     Swal.fire({
+    //         title: 'Reorder Confirmation',
+    //         text: 'Are you sure you want to continue?',
+    //         icon: 'question',
+    //         showCancelButton: true,
+    //         showConfirmButton: true,
+    //         cancelButtonColor: 'red',
+    //         confirmButtonColor: 'indigo',
+    //     })
+    //     .then(response => {
+    //         if (response.isConfirmed) {
+    //             reorder(id)
+    //         }
+    //     })
+    // }
 
     const receiveOrder = async (id: string) => {
         const uid = store.user.id
@@ -137,34 +137,34 @@ export default function PurchaseOrder() {
         )
     }
 
-    const reorder = async (id: string) => {
-        const uid = store.user.id
-        toast.promise(
-            axios.post(`/api/purchase-order/reorder?order_id=${id}`, {
-                user_id: uid
-            }),
-            {
-                pending: 'Reordering...',
-                success: {
-                    render({ data }: { data: AxiosResponse }) {
-                        const ord = data.data?.orders
-                        setOrders(ord)
-                        setOrderArr(ord)
-                        return 'Reordered successfully'
-                    }
-                },
-                error: {
-                    render({ data }: { data: AxiosResponse }) {
-                        Swal.fire({
-                            title: 'Reorder Error',
-                            text: data?.data?.message
-                        })
-                        return 'ERROR'
-                    }
-                }
-            }
-        )
-    }
+    // const reorder = async (id: string) => {
+    //     const uid = store.user.id
+    //     toast.promise(
+    //         axios.post(`/api/purchase-order/reorder?order_id=${id}`, {
+    //             user_id: uid
+    //         }),
+    //         {
+    //             pending: 'Reordering...',
+    //             success: {
+    //                 render({ data }: { data: AxiosResponse }) {
+    //                     const ord = data.data?.orders
+    //                     setOrders(ord)
+    //                     setOrderArr(ord)
+    //                     return 'Reordered successfully'
+    //                 }
+    //             },
+    //             error: {
+    //                 render({ data }: { data: AxiosResponse }) {
+    //                     Swal.fire({
+    //                         title: 'Reorder Error',
+    //                         text: data?.data?.message
+    //                     })
+    //                     return 'ERROR'
+    //                 }
+    //             }
+    //         }
+    //     )
+    // }
 
     return (
         <div className="w-full">
@@ -210,7 +210,7 @@ export default function PurchaseOrder() {
                                                     </button>
                                                 }
                                                 {/* <button className="p-2 rounded text-xs text-white font-bold bg-rose-400 hover:bg-rose-600">Archive</button> */}
-                                                <button onClick={()=>confirmReorder(item._id)} className="p-2 rounded text-xs text-white font-bold bg-cyan-400 hover:bg-cyan-600">Reorder</button>
+                                                {/* <button onClick={()=>confirmReorder(item._id)} className="p-2 rounded text-xs text-white font-bold bg-cyan-400 hover:bg-cyan-600">Reorder</button> */}
                                             </div>
                                         </td>
                                     </tr>

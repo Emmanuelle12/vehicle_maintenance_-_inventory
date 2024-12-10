@@ -4,6 +4,7 @@ import Notification from "@/lib/modals/notifications";
 import MechanicReport from "@/lib/modals/mechanic_reports";
 import { NextResponse } from "next/server";
 import { Types } from "mongoose";
+import User from "@/lib/modals/users";
 
 export const GET = async (request: Request) => {
     try {
@@ -51,6 +52,11 @@ export const POST = async (request: Request) => {
             message: 'You have created an inventory personnel report'
         };
         await Notification.create(notification);
+        const admin = await User.findOne({ role: 'admin' });
+        await Notification.create({
+            user: admin?._id,
+            message: 'Inventory personnel has submitted new report',
+        });
         const mechReps = await MechanicReport.find({ deletedAt: null }).populate('mechanic').populate('driver').populate('report');
         const reports = await InventoryReport.find({ inventory: user_id, deletedAt: null }).populate('item_type').populate('driver');
         return new NextResponse(JSON.stringify({message: 'OK', reports: reports, mechanic_reports: mechReps}), {status: 200});

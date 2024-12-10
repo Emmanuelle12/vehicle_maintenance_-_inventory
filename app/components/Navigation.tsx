@@ -91,7 +91,7 @@ export default function Navigation() {
 
     useEffect(()=>{
         getNotifications()
-    }, [store.user])
+    }, [store.user, getNotifications])
 
     const toggleNotifications = () => {
         if (unreadCount > 0) {

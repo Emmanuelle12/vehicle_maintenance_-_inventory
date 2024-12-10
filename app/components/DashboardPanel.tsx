@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { AiOutlineMenuFold } from "react-icons/ai";
 import { AiOutlineMenuUnfold } from "react-icons/ai";
 
 interface PropProperty {

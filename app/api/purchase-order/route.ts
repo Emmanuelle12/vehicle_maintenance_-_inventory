@@ -1,6 +1,7 @@
 import connect from "@/lib/db";
 import Notification from "@/lib/modals/notifications";
 import PurchaseOrder from "@/lib/modals/purchase_orders";
+import User from "@/lib/modals/users";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -58,6 +59,11 @@ export const POST = async (request: Request) => {
             return new NextResponse(JSON.stringify({message: 'Failed to create purchase order'}), {status: 400});
         }
 
+        const admin = await User.findOne({ role: 'admin' });
+        await Notification.create({
+            user: admin?._id,
+            message: 'You have created new purchase order',
+        });
         return new NextResponse(JSON.stringify({message: 'OK'}), {status: 200});
     } catch (error: unknown) {
         let message = '';
@@ -127,11 +133,17 @@ export const PUT = async (request: Request) => {
         if (!result) {
             return new NextResponse(JSON.stringify({message: 'Failed to update purchase order'}), {status: 400});
         }
+        const order = await PurchaseOrder.findOne({ _id: orderId });
         const notification = {
             user: user_id,
-            message: 'You have received a purchase order'
+            message: 'You have received a purchase order total cost: '+order?.total_price
         }
         await Notification.create(notification);
+        const admin = await User.findOne({ role: 'admin' });
+        await Notification.create({
+            user: admin?._id,
+            message: 'Purchase order has been received with a total cost: '+order?.total_price,
+        });
         const orders = await PurchaseOrder.find({ deletedAt: null }).populate('inventory').populate('supplier');
         return new NextResponse(JSON.stringify({message: 'OK', orders: orders}), {status: 200});
     } catch (error: unknown) {

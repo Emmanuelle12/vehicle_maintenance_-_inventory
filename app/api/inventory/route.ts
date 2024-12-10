@@ -1,6 +1,8 @@
 import connect from "@/lib/db";
 import Inventory from "@/lib/modals/inventory";
+import Notification from "@/lib/modals/notifications";
 import PurchaseOrder from "@/lib/modals/purchase_orders";
+import User from "@/lib/modals/users";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -42,6 +44,11 @@ export const POST = async (request: Request) => {
         if (!result) {
             return new NextResponse(JSON.stringify({message: 'Failed to create inventory item'}), {status: 400});
         }
+        const admin = await User.findOne({ role: 'admin' });
+        await Notification.create({
+            user: admin?._id,
+            message: 'You have created new inventory item',
+        });
         return new NextResponse(JSON.stringify({message: 'OK'}), {status: 200});
     } catch (error: unknown) {
         let message = '';
