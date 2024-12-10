@@ -2,7 +2,7 @@
 
 import Header from "@/app/components/Header"
 import { useAuthStore } from "@/app/stores/auth";
-import axios, { AxiosResponse } from "axios"
+import axios, { AxiosError, AxiosResponse } from "axios"
 import { useCallback, useEffect, useState } from "react"
 import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
@@ -124,10 +124,10 @@ export default function PurchaseOrder() {
                     }
                 },
                 error: {
-                    render({ data }: { data: AxiosResponse }) {
+                    render({ data }: { data: AxiosError<{message: string}> }) {
                         Swal.fire({
                             title: 'Receive Error',
-                            text: data.data?.message,
+                            text: data.response?.data?.message ?? data.message,
                             icon: 'error'
                         })
                         return 'ERROR'
@@ -208,6 +208,10 @@ export default function PurchaseOrder() {
                                                     <button onClick={()=>confirmReceive(item._id)} className="p-2 rounded text-xs text-white font-bold bg-indigo-400 hover:bg-indigo-600">
                                                         Receive
                                                     </button>
+                                                }
+                                                {
+                                                    item.status == 'received' && 
+                                                    <p className="text-green-400 font-semibold">Received</p>
                                                 }
                                                 {/* <button className="p-2 rounded text-xs text-white font-bold bg-rose-400 hover:bg-rose-600">Archive</button> */}
                                                 {/* <button onClick={()=>confirmReorder(item._id)} className="p-2 rounded text-xs text-white font-bold bg-cyan-400 hover:bg-cyan-600">Reorder</button> */}
