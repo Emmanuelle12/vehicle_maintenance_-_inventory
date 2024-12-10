@@ -45,7 +45,7 @@ export default function Archive() {
     }
 
     const navigationArray = [
-        {path: '/mechanic/report', name: 'Reports'},
+        {path: '/mechanic/reports', name: 'Reports'},
         {path: '/mechanic/inventory', name: 'Inventory'},
     ]
 

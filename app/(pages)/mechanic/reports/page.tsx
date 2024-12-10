@@ -83,7 +83,7 @@ export default function Report() {
     }
 
     const navigationArray = [
-        {path: '/mechanic/report', name: 'Reports'},
+        {path: '/mechanic/reports', name: 'Reports'},
         {path: '/mechanic/inventory', name: 'Inventory'},
     ]
 
