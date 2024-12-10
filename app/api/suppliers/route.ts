@@ -5,9 +5,18 @@ import Notification from "@/lib/modals/notifications";
 import { Types } from "mongoose";
 import User from "@/lib/modals/users";
 
-export const GET = async () => {
+export const GET = async (request: Request) => {
     try {
+        const { searchParams } = new URL(request.url);
+        const supplierId = searchParams.get('supplier_id');
         await connect();
+        if (supplierId) {
+            if (!Types.ObjectId.isValid(supplierId)) {
+                return new NextResponse(JSON.stringify({message: 'Supplier id is invalid'}), {status: 400});
+            }
+            const supplier = await Supplier.findOne({ _id: supplierId });
+            return new NextResponse(JSON.stringify({message: 'OK', supplier: supplier}), {status: 200});
+        }
         const suppliers = await Supplier.find({ deletedAt: null });
         return new NextResponse(JSON.stringify({message: 'OK', suppliers: suppliers}), {status: 200});
     } catch (error: unknown) {
@@ -46,7 +55,7 @@ export const POST = async (request: Request) => {
 export const PATCH = async (request: Request) => {
     try {
         const {searchParams} = new URL(request.url);
-        const supplierId = searchParams.get('supplierId');
+        const supplierId = searchParams.get('supplier_id');
         const body = await request.json();
 
         if (!supplierId) {

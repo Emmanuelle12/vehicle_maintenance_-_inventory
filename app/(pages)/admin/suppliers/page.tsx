@@ -6,9 +6,9 @@ import { useCallback, useEffect, useState } from "react"
 import { FaPencilAlt } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 import { useAlert } from "@/app/contexts/AlertContext"
-// import { useConfirmation } from "@/app/contexts/ConfirmationContext"
 import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 import Swal from "sweetalert2";
+import Link from "next/link";
 
 interface Supplier {
     _id: string;
@@ -55,15 +55,6 @@ export default function Suppliers() {
     }
 
     const confirmArchive = (id: string, index: number) => {
-        // confirm({
-        //     message: 'Are you sure you want to archive supplier?',
-        //     onConfirm: () => {
-        //         archiveSupplier(id)
-        //     },
-        //     onCancel: () => {
-
-        //     }
-        // })
         Swal.fire({
             title: 'Archive Confirmation',
             text: 'Are you sure you want to archive supplier?',
@@ -141,10 +132,10 @@ export default function Suppliers() {
                                         <td className="border-x-2 border-b border-black p-2">{ item.contact }</td>
                                         <td className="border-x-2 border-b border-black p-2 w-1/2">
                                             <div className="w-full flex flex-wrap justify-center items-center gap-2">
-                                                <button className="p-2 text-xs rounded bg-blue-400 hover:bg-blue-600 font-bold text-white flex items-center gap-2">
+                                                <Link href={`/admin/suppliers/edit/${item._id}`} className="p-2 text-xs rounded bg-blue-400 hover:bg-blue-600 font-bold text-white flex items-center gap-2">
                                                     <FaPencilAlt />
                                                     EDIT
-                                                </button>
+                                                </Link>
                                                 <button type="button" onClick={()=>confirmArchive(item._id, index)} className="p-2 text-xs rounded bg-red-400 hover:bg-red-600 font-bold text-white flex items-center gap-2">
                                                     <FaTrash />
                                                     ARCHIVE

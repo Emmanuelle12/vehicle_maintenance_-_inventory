@@ -91,7 +91,7 @@ export default function Navigation() {
 
     useEffect(()=>{
         getNotifications()
-    }, [store.user, getNotifications])
+    }, [store.user])
 
     const toggleNotifications = () => {
         if (unreadCount > 0) {
@@ -108,7 +108,7 @@ export default function Navigation() {
         <div className="w-full fixed flex justify-between items-center top-0 border-b border-cyan-400 text-white p-2 pr-5 z-10 bg-img">
             <ProfilePanel isHidden={profileModal} handleLogout={logout} toggle={toggleProfile} />
             <NotificationPanel isHidden={notificationModal} notifications={notifications} toggle={toggleNotifications} deleter={deleteNotification} />
-            <p className="text-lg md:text-2xl font-bold">GUBAT TRANSPORT COOPERATIVE</p>
+            <p className="text-sm md:text-2xl font-bold">GUBAT TRANSPORT COOPERATIVE</p>
             <div className="flex justify-center items-center gap-3 md:gap-10">
                 <div className="relative">
                     <button onClick={toggleNotifications} className="flex flex-col justify-center items-center">
@@ -121,7 +121,7 @@ export default function Navigation() {
                             }
                             <FaRegBell className="text-cyan-400 w-5 h-5" />
                         </div>
-                        <p className="text-center text-sm">Notifications</p>
+                        <p className="text-center text-xs md:text-sm">Notifications</p>
                     </button>
                 </div>
                 <div className="relative">
@@ -129,7 +129,7 @@ export default function Navigation() {
                         <div className="rounded-full ring ring-cyan-400 p-2 relative">
                             <IoMdPerson className="text-cyan-400 w-5 h-5" />
                         </div>
-                        <p className="text-center text-sm">{ capitalize(store.user.position) }</p>
+                        <p className="text-center text-xs md:text-sm">{ capitalize(store.user.position) }</p>
                     </button>
                     {/* <div className={`absolute w-96 p-5 rounded bg-white right-0 ${profileModal ? '' : 'hidden'}`}>
                         <button onClick={logout} className="w-full p-2 rounded bg-blue-400 hover:bg-blue-600 text-xs text-white font-bold">logout</button>

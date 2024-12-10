@@ -94,6 +94,10 @@ export const PATCH = async (request: Request) => {
         if (!updateUser) {
             return new NextResponse(JSON.stringify({message: 'User update failed', user: updateUser.select('-password')}), {status: 400});
         }
+        await Notification.create({
+            user: userId,
+            message: 'You have updated your account'
+        });
         return new NextResponse(JSON.stringify({message: 'User is updated'}), {status: 200});
     } catch (error: unknown) {
         let message = '';

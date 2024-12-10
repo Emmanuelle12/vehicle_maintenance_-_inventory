@@ -22,7 +22,7 @@ export default function Inventory() {
             <Header title="INVENTORY DASHBOARD" />
             {/* <DashboardPanel isHidden={hidePanel} navs={pathArray} /> */}
             <div className="w-full flex flex-col justify-center items-center relative">
-                <section className="w-96 md:w-[400px] flex flex-wrap justify-center items-start gap-10 md:mt-12 px-5">
+                <section className="w-full md:w-[400px] flex flex-wrap justify-center items-start gap-10 px-5">
                     {/* <button onClick={()=>setHidePanel(!hidePanel)} className="flex flex-col justify-center items-center">
                         <div className="max-w-32">
                             <div className="w-20 h-20 md:w-32 md:h-32 p-2 mb-1 rounded-lg relative overflow-hidden bg-white hover:ring ring-cyan-400 flex justify-center items-center">

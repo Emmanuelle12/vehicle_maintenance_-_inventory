@@ -1,6 +1,6 @@
 import connect from "@/lib/db";
 import User from "@/lib/modals/users";
-// import Notification from "@/lib/modals/notifications";
+import Notification from "@/lib/modals/notifications";
 import bcryptjs from "bcryptjs";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
@@ -47,12 +47,12 @@ export const POST = async (request: Request) => {
             user: user
         });
         const now = new Date();
-        // const notificationData = {
-        //     user: new ObjectId(user._id),
-        //     message: `You have logged in at ${now.toLocaleDateString('en-US')}.`,
-        // }
-        // const notification = new Notification(notificationData);
-        // await notification.save();
+        const notificationData = {
+            user: new ObjectId(user._id),
+            message: `You have logged in at ${now.toLocaleDateString('en-US')}.`,
+        }
+        const notification = new Notification(notificationData);
+        await notification.save();
         now.setMinutes(now.getMinutes() + 60);
         response.headers.set('Access-Control-Allow-Origin', '*');
         response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
@@ -84,6 +84,10 @@ export const PATCH = async (request: Request) => {
         if (!updateUser) {
             return new NextResponse(JSON.stringify({message: 'Update failed'}), {status: 400});
         }
+        await Notification.create({
+            user: id,
+            message: 'You have changed you password'
+        });
         return new NextResponse(JSON.stringify({message: 'OK', user: updateUser.select('-password')}), {status: 200});
     } catch (error: unknown) {
         let message = '';
