@@ -22,6 +22,7 @@ interface User {
 interface Item {
     _id: string;
     item_name: string;
+    unit: string;
 }
 
 interface SubmittedReport {
@@ -309,6 +310,7 @@ export default function Report() {
                             <th className="p-2 border-x-2 border-b border-black">Date</th>
                             <th className="p-2 border-x-2 border-b border-black">Type</th>
                             <th className="p-2 border-x-2 border-b border-black">Quantity</th>
+                            <th className="p-2 border-x-2 border-b border-black">Unit</th>
                             <th className="p-2 border-x-2 border-b border-black">Bus Number</th>
                             <th className="p-2 border-x-2 border-b border-black">Driver</th>
                             <th className="p-2 border-x-2 border-b border-black">Action</th>
@@ -322,6 +324,7 @@ export default function Report() {
                                         <td className="p-2 border-x-2 border-b border-black">{new Date(item.createdAt).toLocaleDateString('en-PH')}</td>
                                         <td className="p-2 border-x-2 border-b border-black">{item?.item_type?.item_name}</td>
                                         <td className="p-2 border-x-2 border-b border-black">{item.quantity}</td>
+                                        <td className="p-2 border-x-2 border-b border-black">{item.item_type?.unit}</td>
                                         <td className="p-2 border-x-2 border-b border-black">{item.bus_number}</td>
                                         <td className="p-2 border-x-2 border-b border-black">
                                             <span>{item.driver.first_name} </span>

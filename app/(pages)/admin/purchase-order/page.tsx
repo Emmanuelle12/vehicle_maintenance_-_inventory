@@ -11,6 +11,7 @@ import DashboardPanelAlt from "@/app/components/DashboardPanelAlt"
 
 interface Inventory {
     item_name: string;
+    unit: string;
 }
 
 interface Supplier {
@@ -187,6 +188,7 @@ export default function PurchaseOrder() {
                             <th className="border-x-2 border-black p-2">Item Name</th>
                             <th className="border-x-2 border-black p-2">Brand</th>
                             <th className="border-x-2 border-black p-2">Description</th>
+                            <th className="border-x-2 border-black p-2">Unit</th>
                             <th className="border-x-2 border-black p-2">Supplier</th>
                             <th className="border-x-2 border-black p-2">Purchase Quantity</th>
                             <th className="border-x-2 border-black p-2">Cost Per Item</th>
@@ -204,6 +206,7 @@ export default function PurchaseOrder() {
                                         <td className="border-x-2 border-black p-2">{item.inventory?.item_name}</td>
                                         <td className="border-x-2 border-black p-2">{item?.brand}</td>
                                         <td className="border-x-2 border-black p-2">{item.description}</td>
+                                        <td className="border-x-2 border-black p-2">{item.inventory?.unit}</td>
                                         <td className="border-x-2 border-black p-2">{item.supplier?.supplier_company}</td>
                                         <td className="border-x-2 border-black p-2">{item.quantity}</td>
                                         <td className="border-x-2 border-black p-2">{item.unit_cost.toFixed(2)}</td>

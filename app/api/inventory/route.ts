@@ -3,6 +3,7 @@ import Inventory from "@/lib/modals/inventory";
 import Notification from "@/lib/modals/notifications";
 import PurchaseOrder from "@/lib/modals/purchase_orders";
 import User from "@/lib/modals/users";
+import InventoryStock from "@/lib/modals/inventory_stocks";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -32,7 +33,7 @@ export const GET = async (request: Request) => {
 
 export const POST = async (request: Request) => {
     try {
-        const { item_name } = await request.json();
+        const { item_name, unit, min_num, max_num } = await request.json();
         if (!item_name || typeof item_name !== 'string' || item_name.trim().length === 0) {
             return new NextResponse(JSON.stringify({ message: 'Invalid item name' }), { status: 400 });
         }
@@ -40,10 +41,11 @@ export const POST = async (request: Request) => {
         if (await Inventory.findOne({ item_name: item_name })) {
             return new NextResponse(JSON.stringify({message: 'Item already exists'}), {status: 400});
         }
-        const result = await Inventory.create({ item_name: item_name.trim().toUpperCase() });
+        const result = await Inventory.create({ item_name: item_name.trim().toUpperCase(), unit: unit });
         if (!result) {
             return new NextResponse(JSON.stringify({message: 'Failed to create inventory item'}), {status: 400});
         }
+        await InventoryStock.create({ item_type: result._id, minimum_quantity: min_num, maximum_quantity: max_num });
         const admin = await User.findOne({ role: 'admin' });
         await Notification.create({
             user: admin?._id,

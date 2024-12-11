@@ -1,5 +1,6 @@
 import connect from "@/lib/db";
 import InventoryReport from "@/lib/modals/inventory_reports";
+import InventoryStock from "@/lib/modals/inventory_stocks";
 import Notification from "@/lib/modals/notifications";
 import MechanicReport from "@/lib/modals/mechanic_reports";
 import { NextResponse } from "next/server";
@@ -33,7 +34,16 @@ export const POST = async (request: Request) => {
     try {
         const { user_id, types, quantities, driver, bus_number } = await request.json();
         await connect();
+        const admin = await User.findOne({ role: 'admin' });
         for (let x = 0; x < types.length; x++) {
+            const stock = await InventoryStock.findOne({ item_type: types[x] }).populate('item_type');
+            if ((stock.stocks - quantities[x]) < 0) {
+                const errorMessage = 'Quantity of ' + stock.item_type.item_name + ' has exceeded the available stock';
+                return new NextResponse(JSON.stringify({message: errorMessage}), {status: 400});
+            }
+        }
+        for (let x = 0; x < types.length; x++) {
+            const stock = await InventoryStock.findOne({ item_type: types[x] }).populate('item_type');
             await InventoryReport.create(
                 {
                     inventory: user_id,
@@ -43,6 +53,15 @@ export const POST = async (request: Request) => {
                     bus_number: bus_number,
                 }
             );
+            stock.stocks -= quantities[x];
+            await stock.save();
+            if (stock.stocks <= stock.minimum_quantity) {
+                const content = 'The quantity of ' + stock.item_type.item_name + ' has reached the minimum level. Current quantity: ' + stock.stocks + ' ' + stock.itemt_type.unit;
+                await Notification.create({
+                    user: admin._id,
+                    message: content
+                });
+            }
         }
         // if (!result) {
         //     return new NextResponse(JSON.stringify({message: 'Failed to create report'}), {status: 400});
@@ -52,7 +71,6 @@ export const POST = async (request: Request) => {
             message: 'You have created an inventory personnel report'
         };
         await Notification.create(notification);
-        const admin = await User.findOne({ role: 'admin' });
         await Notification.create({
             user: admin?._id,
             message: 'Inventory personnel has submitted new report',

@@ -2,6 +2,7 @@ import connect from "@/lib/db";
 import Notification from "@/lib/modals/notifications";
 import PurchaseOrder from "@/lib/modals/purchase_orders";
 import User from "@/lib/modals/users";
+import InventoryStock from "@/lib/modals/inventory_stocks";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -144,6 +145,17 @@ export const PUT = async (request: Request) => {
             user: admin?._id,
             message: 'Purchase order has been received with a total cost: '+order?.total_price,
         });
+        const stock = await InventoryStock.findOneAndUpdate(
+            { item_type: order.inventory },
+            { $inc: { stocks: order.quantity } },
+            { new: true }
+        ).populate('item_type');
+        if (stock.stocks >= stock.maximum_quantity) {
+            await Notification.create({
+                user: admin?._id,
+                message: 'The quantity of ' + stock.item_type.item_name + ' has reached the maximum level. Current quantity: ' + stock.stocks + ' ' + stock.item_type.unit
+            });
+        }
         const orders = await PurchaseOrder.find({ deletedAt: null }).populate('inventory').populate('supplier');
         return new NextResponse(JSON.stringify({message: 'OK', orders: orders}), {status: 200});
     } catch (error: unknown) {

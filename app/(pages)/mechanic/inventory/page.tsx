@@ -2,9 +2,6 @@
 
 import Header from "@/app/components/Header"
 import ItemCard from "@/app/components/ItemCard"
-import Image from "next/image"
-import addImg from "@/assets/images/add-item-icon.jpg"
-import DashboardButton from "@/app/components/DashboardButton"
 import { useCallback, useEffect, useState } from "react"
 import axios from "axios"
 import DashboardPanelAlt from "@/app/components/DashboardPanelAlt"
@@ -54,9 +51,6 @@ export default function Inventory() {
                             )
                         })
                     }
-                    <DashboardButton path="/inventory/inventory/create" title="Add Item">
-                        <Image src={addImg} alt="report" width={100} height={100} className="scale-100 absolute" />
-                    </DashboardButton>
                 </div>
             </section>
         </div>

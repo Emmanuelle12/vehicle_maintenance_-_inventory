@@ -8,6 +8,7 @@ import { useCallback, useEffect, useState } from "react"
 interface Item {
     _id: string;
     item_name: string;
+    unit: string;
 }
 
 interface Order {
@@ -39,7 +40,8 @@ interface InventoryReport {
 export default function Inventory({ params }: { params: { slug: string } }) {
     const [item, setItem] = useState<Item>({
         _id: '',
-        item_name: ''
+        item_name: '',
+        unit: '',
     })
     const [itemIn, setItemIn] = useState<Order[]>([])
     const [panel, setPanel] = useState<string>('in')
@@ -111,16 +113,18 @@ export default function Inventory({ params }: { params: { slug: string } }) {
                             <th className="border-x-2 border-b border-black p-2">Date</th>
                             <th className="border-x-2 border-b border-black p-2">Type</th>
                             <th className="border-x-2 border-b border-black p-2">Quantity</th>
+                            <th className="border-x-2 border-b border-black p-2">Unit</th>
                         </tr>
                     </thead>
                     <tbody>
                             {
-                                itemIn.map((item, index) => {
+                                itemIn.map((it, index) => {
                                     return (
                                         <tr key={index}>
-                                            <td className="border-x-2 border-b border-black p-2">{new Date(item.date_received).toLocaleDateString('en-PH')}</td>
-                                            <td className="border-x-2 border-b border-black p-2">{item.inventory.item_name}</td>
-                                            <td className="border-x-2 border-b border-black p-2">{item.quantity}</td>
+                                            <td className="border-x-2 border-b border-black p-2">{new Date(it.date_received).toLocaleDateString('en-PH')}</td>
+                                            <td className="border-x-2 border-b border-black p-2">{it.inventory.item_name}</td>
+                                            <td className="border-x-2 border-b border-black p-2">{it.quantity}</td>
+                                            <td className="border-x-2 border-b border-black p-2">{item?.unit}</td>
                                         </tr>
                                     )
                                 })
@@ -137,17 +141,19 @@ export default function Inventory({ params }: { params: { slug: string } }) {
                             <th className="border-x-2 border-b border-black p-2">Date</th>
                             <th className="border-x-2 border-b border-black p-2">Type</th>
                             <th className="border-x-2 border-b border-black p-2">Quantity Details</th>
+                            <th className="border-x-2 border-b border-black p-2">Unit</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            itemOut.map((item, index) => {
+                            itemOut.map((it, index) => {
                                 return (
                                     <tr key={index}>
                                         {/* <td className="border-r-2 border-b border-black p-2">{}</td> */}
-                                        <td className="border-r-2 border-b border-black p-2">{new Date(item.createdAt).toLocaleDateString('en-PH')}</td>
-                                        <td className="border-r-2 border-b border-black p-2">{item.item_type.item_name}</td>
-                                        <td className="border-r-2 border-b border-black p-2">{item.quantity}</td>
+                                        <td className="border-r-2 border-b border-black p-2">{new Date(it.createdAt).toLocaleDateString('en-PH')}</td>
+                                        <td className="border-r-2 border-b border-black p-2">{it.item_type.item_name}</td>
+                                        <td className="border-r-2 border-b border-black p-2">{it.quantity}</td>
+                                        <td className="border-x-2 border-b border-black p-2">{item?.unit}</td>
                                     </tr>
                                 )
                             })

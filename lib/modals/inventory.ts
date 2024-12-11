@@ -2,6 +2,7 @@ import { Schema, models, model } from "mongoose";
 
 interface IInventory extends Document {
     item_name: string;
+    unit: string;
     deletedAt: Date;
     createdAt: Date;
     updatedAt: Date;
@@ -14,6 +15,7 @@ const inventorySchema = new Schema<IInventory>(
             unique: true,
             required: true,
         },
+        unit: String,
         deletedAt: String,
     },
     {

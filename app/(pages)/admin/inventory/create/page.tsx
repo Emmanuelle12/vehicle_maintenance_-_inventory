@@ -10,6 +10,9 @@ import Swal from "sweetalert2"
 
 export default function Create() {
     const [itemName, setItemName] = useState<string>('')
+    const [unit, setUnit] = useState<string>('')
+    const [minNum, setMinNum] = useState<number>(0)
+    const [maxNum, setMaxNum] = useState<number>(0)
     const [hidePanel, setHidePanel] = useState<boolean>(true)
 
     const togglePanel = () => {
@@ -26,7 +29,7 @@ export default function Create() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         toast.promise(
-            axios.post('/api/inventory', { item_name: itemName }),
+            axios.post('/api/inventory', { item_name: itemName, unit: unit, min_num: minNum, max_num: maxNum }),
             {
                 pending: 'Creating item...',
                 success: {
@@ -68,6 +71,42 @@ export default function Create() {
                                 className="w-full p-2 text-sm rounded" 
                                 value={itemName}
                                 onChange={(e)=>setItemName(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="w-full">
+                            <label htmlFor="unit" className="text-xs text-amber-400 font-bold">Unit:</label>
+                            <input 
+                                type="text" 
+                                name="unit" 
+                                id="unit" 
+                                className="w-full p-2 text-sm rounded" 
+                                value={unit}
+                                onChange={(e)=>setUnit(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="w-full">
+                            <label htmlFor="minNum" className="text-xs text-amber-400 font-bold">Minimum Quantity for Notification:</label>
+                            <input 
+                                type="number" 
+                                name="minNum" 
+                                id="minNum" 
+                                className="w-full p-2 text-sm rounded" 
+                                value={unit}
+                                onChange={(e)=>setMinNum(Number(e.target.value))}
+                                required
+                            />
+                        </div>
+                        <div className="w-full">
+                            <label htmlFor="maxNum" className="text-xs text-amber-400 font-bold">Maximum Quantity for Notification:</label>
+                            <input 
+                                type="number" 
+                                name="maxNum" 
+                                id="maxNum" 
+                                className="w-full p-2 text-sm rounded" 
+                                value={unit}
+                                onChange={(e)=>setMaxNum(Number(e.target.value))}
                                 required
                             />
                         </div>
