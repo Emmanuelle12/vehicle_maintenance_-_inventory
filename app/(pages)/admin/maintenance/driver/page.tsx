@@ -14,13 +14,19 @@ interface User {
     email: string;
 }
 
+interface Conductor {
+    _id: string;
+    full_name: string;
+}
+
 interface Report {
     _id: string;
     report_date: Date;
     bus_number: string;
     driver: User;
-    conductor: string;
+    conductor: Conductor;
     report: [{item_name: ''}];
+    others: string;
     createdAt: Date;
 }
 
@@ -55,7 +61,7 @@ export default function DriverReport() {
             data.driver.first_name.toLowerCase().includes(key.toLowerCase()) ||
             data.driver.middle_name.toLowerCase().includes(key.toLowerCase()) ||
             data.driver.last_name.toLowerCase().includes(key.toLowerCase()) ||
-            data.conductor.toLowerCase().includes(key.toLowerCase()) ||
+            data?.conductor?.full_name?.toLowerCase().includes(key.toLowerCase()) ||
             data.bus_number.toLowerCase().includes(key.toLowerCase()) 
         )
         setReports(temp)
@@ -77,8 +83,8 @@ export default function DriverReport() {
                             <th className="border-x-2 border-black p-2">Bus Number</th>
                             <th className="border-x-2 border-black p-2">Driver</th>
                             <th className="border-x-2 border-black p-2">Conductor</th>
-                            <th className="w-1/3 border-x-2 border-black p-2">Report</th>
-                            {/* <th className="w-1/4 border-x-2 border-black p-2">Action</th> */}
+                            <th className="w-1/4 border-x-2 border-black p-2">Report</th>
+                            <th className="w-1/4 border-x-2 border-black p-2">Others</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,7 +100,7 @@ export default function DriverReport() {
                                             {item.driver.last_name} 
                                             {item.driver?.extension}
                                         </td>
-                                        <td className="p-2 border-x-2 border-black">{item.conductor}</td>
+                                        <td className="p-2 border-x-2 border-black">{item?.conductor?.full_name}</td>
                                         <td className="p-2 border-x-2 border-black">
                                             {
                                                 item.report.map((rep,idx) => {
@@ -102,16 +108,7 @@ export default function DriverReport() {
                                                 })
                                             }
                                         </td>
-                                        {/* <td className="p-2 border-x-2 border-black">
-                                            <div className="w-full flex flex-wrap justify-center items-center gap-2">
-                                                <button
-                                                    onClick={()=>confirmDelete(item._id)}
-                                                    className="p-2 rounded text-white font-bold bg-rose-400 hover:bg-rose-600"
-                                                >
-                                                    Archive
-                                                </button>
-                                            </div>
-                                        </td> */}
+                                        <td className="p-2 border-x-2 border-black">{item.others}</td>
                                     </tr>
                                 )
                             })

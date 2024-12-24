@@ -93,7 +93,7 @@ export default function Create() {
                                 name="minNum" 
                                 id="minNum" 
                                 className="w-full p-2 text-sm rounded" 
-                                value={unit}
+                                value={minNum}
                                 onChange={(e)=>setMinNum(Number(e.target.value))}
                                 required
                             />
@@ -105,7 +105,7 @@ export default function Create() {
                                 name="maxNum" 
                                 id="maxNum" 
                                 className="w-full p-2 text-sm rounded" 
-                                value={unit}
+                                value={maxNum}
                                 onChange={(e)=>setMaxNum(Number(e.target.value))}
                                 required
                             />

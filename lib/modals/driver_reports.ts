@@ -3,9 +3,10 @@ import { Schema, model, models } from "mongoose";
 interface IDriverReport extends Document {
     bus_number: string;
     driver: Schema.Types.ObjectId;
-    conductor: string;
+    conductor: Schema.Types.ObjectId;
     report: Schema.Types.ObjectId[];
     status: string;
+    others: string;
     deletedAt: Date;
     createdAt: Date;
     updatedAt: Date;
@@ -23,7 +24,8 @@ const driverReportSchema = new Schema<IDriverReport>(
             required: true,
         },
         conductor: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: 'Staff',
             required: true,
         },
         report: {
@@ -35,6 +37,7 @@ const driverReportSchema = new Schema<IDriverReport>(
             type: String,
             default: 'pending',
         },
+        others: String,
         deletedAt: Date,
     },
     {

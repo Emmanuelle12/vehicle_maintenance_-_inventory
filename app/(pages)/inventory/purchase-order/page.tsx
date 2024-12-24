@@ -80,6 +80,13 @@ export default function PurchaseOrder() {
             title: 'Receive Confirmation',
             text: 'Are you sure you want to continue?',
             icon: 'question',
+            input: 'text',
+            inputLabel: 'Report:',
+            inputValidator: (value) => {
+                if (!value) {
+                  return "Please write your report";
+                }
+            },
             showCancelButton: true,
             showConfirmButton: true,
             cancelButtonColor: 'red',
@@ -87,7 +94,7 @@ export default function PurchaseOrder() {
         })
         .then(response => {
             if (response.isConfirmed) {
-                receiveOrder(id)
+                receiveOrder(id, response.value)
             }
         })
     }
@@ -109,10 +116,10 @@ export default function PurchaseOrder() {
     //     })
     // }
 
-    const receiveOrder = async (id: string) => {
+    const receiveOrder = async (id: string, report: string) => {
         const uid = store.user.id
         toast.promise(
-            axios.put(`/api/purchase-order?order_id=${id}`, { user_id: uid }),
+            axios.put(`/api/purchase-order?order_id=${id}`, { user_id: uid, report: report }),
             {
                 pending: 'Receiving order...',
                 success: {
@@ -125,6 +132,7 @@ export default function PurchaseOrder() {
                 },
                 error: {
                     render({ data }: { data: AxiosError<{message: string}> }) {
+                        console.log(data)
                         Swal.fire({
                             title: 'Receive Error',
                             text: data.response?.data?.message ?? data.message,
@@ -170,7 +178,7 @@ export default function PurchaseOrder() {
         <div className="w-full">
             <ToastContainer position="bottom-right" />
             <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
-            <Header title="PURCHASE ORDERS" searchFunction={searchFunction}/>
+            <Header title="PURCHASE ORDERS" goTo2={{path: '/inventory/purchase-order/received', title: 'reports'}} searchFunction={searchFunction}/>
             <section className="w-full bg-white min-h-80 2xl:min-h-96 overflow-auto">
                 <table className="w-full table-auto md:table-fixed text-center text-xs">
                     <thead className="bg-gray-200">

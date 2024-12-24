@@ -7,13 +7,14 @@ import Header from "@/app/components/Header";
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import Swal from "sweetalert2";
-import Select, { MultiValue } from "react-select";
+import Select, { MultiValue, SingleValue } from "react-select";
 
 interface FormState {
     bus_number: string,
     driver: string,
     conductor: string,
     report: string[],
+    others: string;
 }
 
 interface Inventory {
@@ -26,14 +27,21 @@ interface ItemOptions {
     label: string;
 }
 
+interface Staff {
+    _id: string;
+    full_name: string;
+}
+
 export default function Create() {
     const [isMounted, setIsMounted] = useState<boolean>(false)
     const [itemOptions, setItemOptions] = useState<ItemOptions[]>([])
+    const [staffOptions, setStaffOptions] = useState<ItemOptions[]>([])
     const [reportForm, setReportForm] = useState<FormState>({
         bus_number: '',
         driver: '',
         conductor: '',
         report: [],
+        others: '',
     })
     const store = useAuthStore()
  
@@ -55,6 +63,7 @@ export default function Create() {
                             driver: store.user.id,
                             conductor: '',
                             report: [],
+                            others: '',
                         })
                         return 'Report created'
                     }
@@ -90,6 +99,14 @@ export default function Create() {
         })
     }
 
+    const handleConductorChange = (selectedOption: SingleValue<ItemOptions>) => {
+        const id = selectedOption?.value
+        setReportForm({
+            ...reportForm,
+            conductor: id || ''
+        })
+    }
+
     const setOptions = (items: Inventory[]) => {
         const newArr = items.map((inv)=>{
             return {
@@ -112,10 +129,28 @@ export default function Create() {
         })
     }, [])
 
+    const getConductors = useCallback(async () => {
+        await axios.get('/api/staffs/conductors')
+        .then(response => {
+            const conductors: Staff[] = response.data.conductors
+            const temp = conductors.map((cond) => {
+                return {
+                    value: cond._id,
+                    label: cond.full_name
+                }
+            })
+            setStaffOptions(temp)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }, [])
+
     useEffect(()=>{
         setIsMounted(true)
         getInventory()
-    }, [getInventory])
+        getConductors()
+    }, [getInventory, getConductors])
     
     if (!isMounted) {
         return null
@@ -153,13 +188,17 @@ export default function Create() {
                             </div>
                             <div className="group w-full">
                                 <label htmlFor="conductor" className="text-xs text-amber-400 font-bold">Conductor:</label>
-                                <input 
+                                {/* <input 
                                     type="text" 
                                     name="conductor" 
                                     id="conductor" 
                                     className="p-2 rounded border border-black w-full" 
                                     value={reportForm.conductor}
                                     onChange={handleOnChange}
+                                /> */}
+                                <Select 
+                                    options={staffOptions}
+                                    onChange={handleConductorChange}
                                 />
                             </div>
                             <div className="group w-full">
@@ -175,6 +214,16 @@ export default function Create() {
                                     isMulti
                                     options={itemOptions}
                                     onChange={handleSelectChange}
+                                />
+                            </div>
+                            <div className="group w-full">
+                                <label htmlFor="others" className="text-xs text-amber-400 font-bold">Others:</label>
+                                <input 
+                                    type="text" 
+                                    name="others" 
+                                    id="others" 
+                                    className="p-2 rounded border border-black w-full" 
+                                    onChange={handleOnChange}
                                 />
                             </div>
                             <button type="submit" className="w-full p-2 rounded bg-amber-400 hover:bg-amber-600 text-white font-bold">Create</button>

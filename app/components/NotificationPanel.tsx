@@ -46,8 +46,11 @@ const NotificationPanel: FC<PanelProps> = ({ isHidden, notifications, toggle, de
                                 return (
                                     <div className="mb-5 flex justify-center items-center" key={index}>
                                         <div className="border-b border-cyan-400 w-full">
-                                            <p className="text-center">{item.message}</p>
-                                            <p className="text-xs font-bold">{new Date(item.createdAt).toLocaleTimeString('en-US')} {new Date(item.createdAt).toLocaleDateString('en-US')}</p>
+                                            <p className="text-center">{item?.message}</p>
+                                            <p className="text-xs font-bold">
+                                                <span>{new Date(item?.createdAt ?? 0).toLocaleTimeString('en-US')} </span>
+                                                <span>{new Date(item?.createdAt ?? 0).toLocaleDateString('en-US')}</span>
+                                            </p>
                                         </div>
                                         <button type="button" onClick={()=>deleter(item._id)} className="">
                                             <FaTrash className="text-white hover:text-red-400" />

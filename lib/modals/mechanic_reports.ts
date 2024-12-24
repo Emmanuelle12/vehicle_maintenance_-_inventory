@@ -4,9 +4,11 @@ interface IMechanicReport extends Document {
     mechanic: Schema.Types.ObjectId;
     bus_number: string;
     driver: Schema.Types.ObjectId;
-    conductor: string;
+    conductor: Schema.Types.ObjectId;
     report: Schema.Types.ObjectId[];
     report_date: Date;
+    repair_status: string;
+    narrative_report: string;
     status: string;
     deletedAt?: Date | null;
     createdAt: Date;
@@ -30,14 +32,20 @@ const mechanicReportSchema = new Schema<IMechanicReport>(
             required: true,
         },
         conductor: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: 'Staff',
             required: true,
         },
         report: {
             type: [Schema.Types.ObjectId],
-            ref: 'Inventory',
+            ref: 'MechanicReportItems',
             required: true,
         },
+        repair_status: {
+            type: String,
+            required: true,
+        },
+        narrative_report: String,
         status: {
             type: String,
             default: 'pending',

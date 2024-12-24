@@ -3,6 +3,7 @@ import Notification from "@/lib/modals/notifications";
 import PurchaseOrder from "@/lib/modals/purchase_orders";
 import User from "@/lib/modals/users";
 import InventoryStock from "@/lib/modals/inventory_stocks";
+import OrdersReceivedReports from "@/lib/modals/orders_received_report";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -116,7 +117,7 @@ export const PATCH = async (request: Request) => {
 export const PUT = async (request: Request) => {
     try {
         const { searchParams } = new URL(request.url);
-        const { user_id } = await request.json();
+        const { user_id, report } = await request.json();
         const orderId = searchParams.get('order_id');
         if (!orderId) {
             return new NextResponse(JSON.stringify({message: 'Missing purchase order id'}), {status: 400});
@@ -141,6 +142,7 @@ export const PUT = async (request: Request) => {
         }
         await Notification.create(notification);
         const admin = await User.findOne({ role: 'admin' });
+        await OrdersReceivedReports.create({ order: orderId, narrative_report: report });
         await Notification.create({
             user: admin?._id,
             message: 'Purchase order has been received with a total cost: '+order?.total_price,

@@ -17,13 +17,18 @@ interface User {
     email: string;
 }
 
+interface Conductor {
+    full_name: string;
+}
+
 interface Report {
     _id: string;
     report_date: Date;
     bus_number: string;
     driver: User;
-    conductor: string;
+    conductor: Conductor;
     report: [{item_name: ''}];
+    others: string;
     createdAt: Date;
 }
 
@@ -43,7 +48,7 @@ export default function Report() {
     const handleSearch = (key: string) => {
         const temp = reportArr.filter(data => 
             data.bus_number.toLowerCase().includes(key.toLowerCase()) ||
-            data.conductor.toLowerCase().includes(key.toLowerCase())
+            data.conductor?.full_name?.toLowerCase().includes(key.toLowerCase())
         )
         setReports({
             ...reports,
@@ -138,7 +143,7 @@ export default function Report() {
                 goTo2={{ path: '/driver/report/archive', title: 'Archive' }} 
                 searchFunction={handleSearch} 
             />
-            <section className="w-full bg-white min-h-80">
+            <section className="w-full bg-white min-h-80 overflow-auto">
                 <table className="w-full table-auto md:table-fixed text-center text-sm">
                     <thead className="bg-gray-200">
                         <tr>
@@ -146,8 +151,9 @@ export default function Report() {
                             <th className="border-x-2 border-black p-2">Bus Number</th>
                             <th className="border-x-2 border-black p-2">Driver</th>
                             <th className="border-x-2 border-black p-2">Conductor</th>
-                            <th className="w-1/3 border-x-2 border-black p-2">Report</th>
-                            <th className="w-1/4 border-x-2 border-black p-2">Action</th>
+                            <th className="w-1/5 border-x-2 border-black p-2">Report</th>
+                            <th className="w-1/5 border-x-2 border-black p-2">Others</th>
+                            <th className="w-1/5 border-x-2 border-black p-2">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -163,7 +169,7 @@ export default function Report() {
                                             <span>{item.driver?.last_name} </span>
                                             <span>{item.driver?.extension}</span>
                                         </td>
-                                        <td className="p-2 border-x-2 border-black">{item.conductor}</td>
+                                        <td className="p-2 border-x-2 border-black">{item.conductor?.full_name}</td>
                                         <td className="p-2 border-x-2 border-black">
                                             {
                                                 item.report.map((rep,idx) => {
@@ -171,6 +177,7 @@ export default function Report() {
                                                 })
                                             }
                                         </td>
+                                        <td className="p-2 border-x-2 border-black">{item?.others}</td>
                                         <td className="p-2 border-x-2 border-black">
                                             <div className="w-full flex flex-wrap justify-center items-center gap-2">
                                                 <button

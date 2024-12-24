@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Suspense } from "react";
-import Loading from "./loading";
 import { AlertProvider } from "./contexts/AlertContext";
 import { ConfirmationProvider } from "./contexts/ConfirmationContext";
+import Loading from "./Loading";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

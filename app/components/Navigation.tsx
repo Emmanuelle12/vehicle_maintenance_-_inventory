@@ -129,7 +129,7 @@ export default function Navigation() {
                         <div className="rounded-full ring ring-cyan-400 p-2 relative">
                             <IoMdPerson className="text-cyan-400 w-5 h-5" />
                         </div>
-                        <p className="text-center text-xs md:text-sm">{ capitalize(store.user.position) }</p>
+                        <p className="text-center text-xs md:text-sm">{ capitalize(store?.user?.position) }</p>
                     </button>
                     {/* <div className={`absolute w-96 p-5 rounded bg-white right-0 ${profileModal ? '' : 'hidden'}`}>
                         <button onClick={logout} className="w-full p-2 rounded bg-blue-400 hover:bg-blue-600 text-xs text-white font-bold">logout</button>

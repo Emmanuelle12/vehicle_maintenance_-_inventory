@@ -17,7 +17,7 @@ export const GET = async (request: Request) => {
         await connect();
         if (!driverId) {
             const inventory = await Inventory.find({ deletedAt: null });
-            const reports = await DriverReport.find({ deletedAt: null }).populate('report').populate('driver');
+            const reports = await DriverReport.find({ deletedAt: null }).populate('report').populate('driver').populate('conductor');
             return new NextResponse(JSON.stringify({message: 'OK', reports: reports, inventory: inventory}), {status: 200});
         }
 
@@ -42,7 +42,7 @@ export const GET = async (request: Request) => {
 
 export const POST = async (request: Request) => {
     try {
-        const {driver,bus_number,conductor,report} = await request.json();
+        const {driver,bus_number,conductor,report, others} = await request.json();
         await connect();
         if (!Types.ObjectId.isValid(driver)) {
             return new NextResponse(JSON.stringify({message: 'Driver id is invalid'}), {status: 400});
@@ -51,11 +51,15 @@ export const POST = async (request: Request) => {
         if (!user || user?.position != 'driver') {
             return new NextResponse(JSON.stringify({message: 'User is not a driver'}), {status: 400});
         }
+        if (!Types.ObjectId.isValid(conductor)) {
+            return new NextResponse(JSON.stringify({message: 'Conductor id is invalid'}), {status: 400});
+        }
         const result = DriverReport.create({
             bus_number: bus_number,
             driver: driver,
             conductor: conductor,
-            report: report
+            report: report,
+            others: others,
         })
         if (!result) {
             return new NextResponse(JSON.stringify({message: 'Failed to create report'}), {status: 400});

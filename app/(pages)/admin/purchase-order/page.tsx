@@ -1,7 +1,7 @@
 'use client'
 
 import Header from "@/app/components/Header"
-import axios, { AxiosResponse } from "axios"
+import axios, { AxiosError, AxiosResponse } from "axios"
 import { useCallback, useEffect, useState } from "react"
 import Swal from "sweetalert2"
 import { ToastContainer, toast } from "react-toastify"
@@ -167,11 +167,58 @@ export default function PurchaseOrder() {
         )
     }
 
+    const confirmReorder = (id: string) => {
+        Swal.fire({
+            title: 'Reorder Confirmation',
+            text: 'Are you sure you want to continue?',
+            icon: 'question',
+            showCancelButton: true,
+            showConfirmButton: true,
+            cancelButtonColor: 'red',
+            confirmButtonColor: 'indigo',
+        })
+        .then(response => {
+            if (response.isConfirmed) {
+                handleReorder(id)
+            }
+        })
+    }
+
+    const handleReorder = async (id: string) => {
+        const uid = store.user.id
+        toast.promise(
+            axios.put(`/api/purchase-order/reorder?order_id=${id}`, { user_id: uid }),
+            {
+                pending: 'Reordering...',
+                success: {
+                    render({ data }: { data: AxiosResponse }) {
+                        const po = data.data?.orders
+                        setOrders(po)
+                        setOrderArr(po)
+                        return 'Reordered'
+                    }
+                },
+                error: {
+                    render({ data }: { data: AxiosError<{message: string}> }) {
+                        console.log(data)
+                        Swal.fire({
+                            title: 'Reorder Error',
+                            text: data.response?.data?.message || data.message,
+                            icon: 'error'
+                        })
+                        return 'Error'
+                    }
+                },
+            }
+        )
+    }
+
     const navigationArray = [
         {path: '/admin', name: 'Home'},
         {path: '/admin/purchase-order', name: 'Purchase Orders'},
         {path: '/admin/inventory', name: 'Inventory'},
         {path: '/admin/suppliers', name: 'Suppliers'},
+        {path: '/admin/staff', name: 'Staffs'},
     ]
 
     return (
@@ -223,7 +270,7 @@ export default function PurchaseOrder() {
                                                 <button onClick={()=>confirmArchive(item._id)} className="p-2 rounded text-xs text-white font-bold bg-rose-400 hover:bg-rose-600">
                                                     Archive
                                                 </button>
-                                                <button className="p-2 rounded text-xs text-white font-bold bg-cyan-400 hover:bg-cyan-600">Reorder</button>
+                                                <button onClick={()=>confirmReorder(item._id)} className="p-2 rounded text-xs text-white font-bold bg-cyan-400 hover:bg-cyan-600">Reorder</button>
                                             </div>
                                         </td>
                                     </tr>
