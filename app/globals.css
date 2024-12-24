@@ -101,6 +101,18 @@ body {
   background-color: rgb(52 211 153);
 }
 
+.bg-4 {
+  background-color: rgb(52 211 153);
+}
+
+.bg-5 {
+  background-color: rgb(52 211 153);
+}
+
+.bg-6 {
+  background-color: rgb(52 211 153);
+}
+
 .bg-0:hover {
   background-color: rgb(79 70 229);
 }
@@ -114,5 +126,17 @@ body {
 }
 
 .bg-3:hover {
+  background-color: rgb(5 150 105);
+}
+
+.bg-4:hover {
+  background-color: rgb(5 150 105);
+}
+
+.bg-5:hover {
+  background-color: rgb(5 150 105);
+}
+
+.bg-6:hover {
   background-color: rgb(5 150 105);
 }

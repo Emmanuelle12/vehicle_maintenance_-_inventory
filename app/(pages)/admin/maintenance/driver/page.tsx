@@ -36,8 +36,13 @@ export default function DriverReport() {
     const [hidePanel, setHidePanel] = useState<boolean>(false)
 
     const pathArray = [
-        { path: '/admin/maintenance/driver', name: 'Drivers Report' },
-        { path: '/admin/maintenance/mechanic', name: 'Mechanic Report' },
+        {path: '/admin', name: 'Home'},
+        {path: '/admin/maintenance/driver', name: 'Driver Report'},
+        {path: '/admin/maintenance/mechanic', name: 'Mechanic Report'},
+        {path: '/admin/purchase-order', name: 'Purchase Orders'},
+        {path: '/admin/inventory', name: 'Inventory'},
+        {path: '/admin/suppliers', name: 'Suppliers'},
+        {path: '/admin/staff', name: 'Staffs'},
     ]
 
     const togglePanel = () => {

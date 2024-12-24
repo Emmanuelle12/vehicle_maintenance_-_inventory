@@ -27,6 +27,7 @@ export default function Inventory() {
         {path: '/admin/purchase-order', name: 'Purchase Orders'},
         {path: '/admin/inventory', name: 'Inventory'},
         {path: '/admin/suppliers', name: 'Suppliers'},
+        {path: '/admin/staff', name: 'Staff'},
     ]
 
     const getInventory = useCallback(async () => {

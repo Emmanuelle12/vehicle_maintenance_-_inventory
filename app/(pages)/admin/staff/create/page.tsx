@@ -34,6 +34,8 @@ export default function Create() {
 
     const navigationArray = [
         {path: '/admin', name: 'Home'},
+        {path: '/admin/maintenance/driver', name: 'Driver Report'},
+        {path: '/admin/maintenance/mechanic', name: 'Mechanic Report'},
         {path: '/admin/purchase-order', name: 'Purchase Orders'},
         {path: '/admin/inventory', name: 'Inventory'},
         {path: '/admin/suppliers', name: 'Suppliers'},

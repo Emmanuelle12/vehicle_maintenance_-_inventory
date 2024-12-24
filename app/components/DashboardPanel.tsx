@@ -65,7 +65,7 @@ interface PanelProps {
                                 <Link 
                                     href={navigation.path} 
                                     key={index}
-                                    className={`p-2 rounded w-full text-white font-bold active:ring-2 ring-cyan-400 bg-${index}`}
+                                    className={`p-2 rounded w-full text-white font-bold active:ring-2 ring-cyan-400 bg-1`}
                                 >
                                     {navigation.name}
                                 </Link>
