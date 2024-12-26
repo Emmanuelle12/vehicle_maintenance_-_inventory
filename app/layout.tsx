@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { AlertProvider } from "./contexts/AlertContext";
-import { ConfirmationProvider } from "./contexts/ConfirmationContext";
+// import { AlertProvider } from "./contexts/AlertContext";
+// import { ConfirmationProvider } from "./contexts/ConfirmationContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,12 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* <DashboardPanel /> */}
-        <ConfirmationProvider>
-            <AlertProvider>
               {children}
-            </AlertProvider>
-          </ConfirmationProvider>
       </body>
     </html>
   );

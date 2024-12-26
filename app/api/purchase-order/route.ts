@@ -117,7 +117,7 @@ export const PATCH = async (request: Request) => {
 export const PUT = async (request: Request) => {
     try {
         const { searchParams } = new URL(request.url);
-        const { user_id, report } = await request.json();
+        const { user_id, report = null } = await request.json();
         const orderId = searchParams.get('order_id');
         if (!orderId) {
             return new NextResponse(JSON.stringify({message: 'Missing purchase order id'}), {status: 400});

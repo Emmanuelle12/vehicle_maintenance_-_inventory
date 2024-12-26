@@ -39,6 +39,7 @@ export default function Stocks() {
     const getStocks = useCallback(async () => {
         await axios.get('/api/stocks')
         .then(response => {
+            console.log(response)
             const st = response.data?.stocks
             setStocks(st)
         })
@@ -69,9 +70,9 @@ export default function Stocks() {
                             stocks.map((st,ix) => {
                                 return (
                                     <tr key={ix}>
-                                        <td className="p-2 border-x-2 border-black">{st.item_type.item_name}</td>
+                                        <td className="p-2 border-x-2 border-black">{st?.item_type?.item_name}</td>
                                         <td className="p-2 border-x-2 border-black">{st.stocks}</td>
-                                        <td className="p-2 border-x-2 border-black">{st.item_type.unit}</td>
+                                        <td className="p-2 border-x-2 border-black">{st?.item_type?.unit}</td>
                                     </tr>
                                 )
                             })

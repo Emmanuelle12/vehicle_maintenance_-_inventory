@@ -43,7 +43,7 @@ export default function Inventory() {
     return (
         <div className="w-full">
             <DashboardPanelAlt isHidden={hidePanel} toggle={togglePanel} navs={navigationArray} />
-            <Header title="INVENTORY" backTo={'/inventory'} />
+            <Header title="INVENTORY" backTo={'/inventory'} goTo2={{path: '/inventory/inventory/stocks', title: 'Stocks'}} />
             <section className="w-full md:px-10">
                 <div className="w-full flex flex-wrap justify-center gap-2 md:gap-4 pb-10">
                     {
