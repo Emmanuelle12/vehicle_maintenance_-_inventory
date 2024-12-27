@@ -17,7 +17,71 @@ export const GET = async (request: Request) => {
         await connect();
         if (!driverId) {
             const inventory = await Inventory.find({ deletedAt: null });
-            const reports = await DriverReport.find({ deletedAt: null }).populate('report').populate('driver').populate('conductor');
+            // const reports = await DriverReport.find({ deletedAt: null }).populate('report').populate('driver').populate('conductor');
+            const reports = await DriverReport.aggregate([
+                {
+                    $match: { deletedAt: null },
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'driver',
+                        foreignField: '_id',
+                        as: 'driver',
+                    },
+                },
+                {
+                    $unwind: {
+                        path: '$driver',
+                        preserveNullAndEmptyArrays: false,
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'inventories',
+                        localField: 'report',
+                        foreignField: '_id',
+                        as: 'report',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'staffs',
+                        localField: 'conductor',
+                        foreignField: '_id',
+                        as: 'conductor',
+                    },
+                },
+                {
+                    $unwind: {
+                        path: '$conductor',
+                        preserveNullAndEmptyArrays: false,
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        driver: {
+                            _id: '$driver._id',
+                            first_name: '$driver.first_name',
+                            middle_name: '$driver.middle_name',
+                            last_name: '$driver.last_name',
+                        },
+                        report: {
+                            _id: '$report._id',
+                            item_name: '$report.item_name',
+                            unit: '$report.unit',
+                        },
+                        conductor: {
+                            _id: '$conductor._id',
+                            full_name: '$conductor.full_name',
+                        },
+                        createdAt: 1,
+                        others: 1,
+                        bus_number: 1,
+                    }
+                }
+            ]);
             return new NextResponse(JSON.stringify({message: 'OK', reports: reports, inventory: inventory}), {status: 200});
         }
 

@@ -25,15 +25,26 @@ interface Item {
     unit: string;
 }
 
+interface ReportItem {
+    _id: string;
+    inventory: Item;
+    quantity: number;
+}
+
 interface SubmittedReport {
     _id: string;
     bus_number: string;
     driver: User | null;
-    conductor: string;
-    report: Item[] | null;
+    conductor: Conductor | null;
+    report: ReportItem[] | null;
     createdAt: Date;
     date_report: Date;
     status: string;
+    mechanic: Mechanic | null;
+}
+
+interface Mechanic {
+    _id: string;
 }
 
 interface inventoryReport {
@@ -46,6 +57,11 @@ interface inventoryReport {
     createdAt: Date;
 }
 
+interface Conductor {
+    _id: string;
+    full_name: string;
+}
+
 export default function Report() {
     const [panel, setPanel] = useState<string>('mechanic')
     const [reportModal, setReportModal] = useState<boolean>(false)
@@ -55,11 +71,12 @@ export default function Report() {
         _id: '',
         bus_number: '',
         driver: null,
-        conductor: '',
+        conductor: null,
         report: null,
         createdAt: new Date(),
         date_report: new Date(),
         status: '',
+        mechanic: null,
     })
     const [quantity, setQuentity] = useState<number[]>([])
     const [reports, setReports] = useState<inventoryReport[]>([])
@@ -85,7 +102,7 @@ export default function Report() {
                 data.driver?.first_name.toLowerCase().includes(key.toLowerCase()) ||
                 data.driver?.middle_name.toLowerCase().includes(key.toLowerCase()) ||
                 data.driver?.last_name.toLowerCase().includes(key.toLowerCase()) ||
-                data.report?.some(item => item.item_name.toLowerCase().includes(key.toLowerCase()))
+                data.report?.some(item => item?.inventory?.item_name.toLowerCase().includes(key.toLowerCase()))
             )
             setMechReports(temp)
         }
@@ -117,6 +134,7 @@ export default function Report() {
     const getMech = useCallback(async () => {
         await axios.get('/api/mechanic')
         .then(response => {
+            console.log(response)
             const mec = response.data?.reports
             setMechReports(mec)
             setMechRepArr(mec)
@@ -137,13 +155,16 @@ export default function Report() {
         e.preventDefault()
         const updatedTypes = selectedReport.report ? [...selectedReport.report.map(item => item._id)] : []
         const id = store.user.id
+        console.log(updatedTypes)
         toast.promise(
             axios.post('/api/inventory-report', {
+                _id: selectedReport._id,
                 user_id: id,
                 types: updatedTypes,
                 quantities: quantity,
                 driver: selectedReport.driver,
                 bus_number: selectedReport.bus_number,
+                mechanic: selectedReport.mechanic?._id,
             }),
             {
                 pending: 'Submitting report...',
@@ -223,7 +244,7 @@ export default function Report() {
                                 selectedReport.report?.map((item,index) => {
                                     return(
                                         <div key={index} className="group w-full">
-                                            <label htmlFor={item.item_name} className="text-xs font-bold">{item.item_name}:</label>
+                                            <label htmlFor={item?.inventory?.item_name} className="text-xs font-bold">{item?.inventory?.item_name}:</label>
                                             <input 
                                                 type="number" 
                                                 className="w-full p-2 rounded text-sm border border-black rounded" 
@@ -285,16 +306,22 @@ export default function Report() {
                                             <span>{rep?.driver?.last_name} </span>
                                             <span>{rep?.driver?.extension}</span>
                                         </td>
-                                        <td className="p-2 border-x-2 border-b border-black">{rep.conductor}</td>
+                                        <td className="p-2 border-x-2 border-b border-black">{rep?.conductor?.full_name}</td>
                                         <td className="p-2 border-x-2 border-b border-black">{rep?.report?.map((prod,idx) => {
                                             return(
-                                                <p key={idx}>{prod.item_name}</p>
+                                                <p key={idx}>{prod?.inventory?.item_name}</p>
                                             )
                                         })}</td>
                                         <td className="p-2 border-x-2 border-b border-black">
-                                            <div className="w-full flex flex-wrap justify-center items-center gap-2">
-                                                <button onClick={()=>toggleModal(rep)} className="p-2 text-sm text-white font-bold bg-indigo-400 hover:bg-indigo-600 rounded">report</button>
-                                            </div>
+                                            {
+                                                rep?.status === 'pending' ? (
+                                                    <div className="w-full flex flex-wrap justify-center items-center gap-2">
+                                                        <button onClick={()=>toggleModal(rep)} className="p-2 text-sm text-white font-bold bg-indigo-400 hover:bg-indigo-600 rounded">report</button>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-green-400">{ rep?.status }</span>
+                                                )
+                                            }
                                         </td>
                                     </tr>
                                 )

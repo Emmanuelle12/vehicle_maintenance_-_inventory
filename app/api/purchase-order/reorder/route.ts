@@ -38,7 +38,65 @@ export const PUT = async (request: Request) => {
             message: 'You have reordered a purchase order',
         }
         await Notification.create(notification);
-        const orders = await PurchaseOrder.find({ deletedAt: null }).populate('inventory').populate('supplier');
+        // const orders = await PurchaseOrder.find({ deletedAt: null }).populate('inventory').populate('supplier');
+        const orders = await PurchaseOrder.aggregate([
+            {
+                $match: { deletedAt: null },
+            },
+            {
+                $lookup: {
+                    from: 'inventories',
+                    localField: 'inventory',
+                    foreignField: '_id',
+                    as: 'inventory',
+                },
+            },
+            {
+                $unwind: {
+                    path: '$inventory',
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
+                $lookup: {
+                    from: 'suppliers',
+                    localField: 'supplier',
+                    foreignField: '_id',
+                    as: 'supplier',
+                },
+            },
+            {
+                $unwind: {
+                    path: '$supplier',
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    brand: 1,
+                    description: 1,
+                    date_ordered: 1,
+                    date_received: 1,
+                    unit_cost: 1,
+                    quantity: 1,
+                    total_price: 1,
+                    status: 1,
+                    createdAt: 1,
+                    inventory: {
+                        _id: '$inventory._id',
+                        item_name: '$inventory.item_name',
+                        unit: '$inventory.unit'
+                    },
+                    supplier: {
+                        _id: '$supplier._id',
+                        supplier_company: '$supplier.supplier_company',
+                        supplier_address: '$supplier.supplier_address',
+                        contact: '$supplier.contact'
+                    },
+                },
+            }
+        ]);
         return new NextResponse(JSON.stringify({message: 'OK', orders: orders}), {status: 200});
     } catch (error: unknown) {
         let message = '';

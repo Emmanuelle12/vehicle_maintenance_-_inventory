@@ -52,6 +52,7 @@ export default function DriverReport() {
     const getReports = useCallback(async () => {
         await axios.get('/api/drivers')
         .then(response => {
+            console.log(response)
             const rep = response.data?.reports
             setReports(rep)
             setReportArr(rep)

@@ -200,7 +200,7 @@ export const GET = async (request: Request) => {
                         updatedAt: 1,
                     },
                 },
-            ]);                     
+            ]);                   
             return new NextResponse(JSON.stringify({message: 'OK', reports: reports, inventory: inventory, driver: driver_reports}), {status: 200});
         }
         // const reports = await MechanicReport.find({ mechanic: new Types.ObjectId(mechId), deletedAt: null }).populate('mechanic').populate('driver').populate('report');
@@ -411,6 +411,7 @@ export const POST = async (request: Request) => {
         }
         const newReport = {
             ...body,
+            conductor: body?.conductor?._id,
             report: reportArray
         };
         const result = await MechanicReport.create(newReport);

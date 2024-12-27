@@ -21,6 +21,7 @@ interface User {
 }
 
 interface Conductor {
+    _id: string;
     full_name: string;
 }
 
@@ -168,6 +169,7 @@ export default function Report() {
     const submitReport = async (e: FormEvent) => {
         e.preventDefault()
         const id = store.user.id
+        console.log(selectedReport)
         toast.promise(
             axios.post(`/api/mechanic`, {
                 report_id: selectedReport._id,
@@ -184,14 +186,18 @@ export default function Report() {
             {
                 pending: 'Submitting report...',
                 success: {
-                    render() {
-                        // setSelectedItem([])
+                    render({ data }: { data: AxiosResponse }) {
+                        const drv = data?.data?.driver
+                        const rep = data?.data?.reports
+                        setReports(drv)
+                        setReportsArr(drv)
+                        setSubmittedReports(rep)
                         return 'Report submitted'
                     }
                 },
                 error: {
                     render({ data }: { data: AxiosResponse }) {
-                        console.log(data)
+                        console.log(data, selectedReport)
                         Swal.fire({
                             title: 'Submission Error',
                             text: data.data?.message,
