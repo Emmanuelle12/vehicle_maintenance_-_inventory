@@ -132,6 +132,7 @@ export default function Create() {
     const getConductors = useCallback(async () => {
         await axios.get('/api/staffs/conductors')
         .then(response => {
+            console.log(response)
             const conductors: Staff[] = response.data.conductors
             const temp = conductors.map((cond) => {
                 return {

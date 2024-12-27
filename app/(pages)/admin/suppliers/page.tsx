@@ -5,7 +5,6 @@ import axios from "axios"
 import { useCallback, useEffect, useState } from "react"
 import { FaPencilAlt } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
-import { useAlert } from "@/app/contexts/AlertContext"
 import DashboardPanelAlt from "@/app/components/DashboardPanelAlt";
 import Swal from "sweetalert2";
 import Link from "next/link";
@@ -29,7 +28,6 @@ export default function Suppliers() {
         supplierArr: [],
         loading: true
     })
-    const { triggerAlert } = useAlert()
     const [hidePanel, setHidePanel] = useState<boolean>(true)
 
     const togglePanel = () => {
@@ -88,7 +86,11 @@ export default function Suppliers() {
         })
         .catch(error => {
             console.log(error)
-            triggerAlert(error?.response?.data?.message, 'error')
+            Swal.fire({
+                title: 'Archive Error',
+                text: error.response?.data?.message ?? error?.message,
+                icon: 'error',
+            })
         })
     }
 
